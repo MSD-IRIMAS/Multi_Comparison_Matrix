@@ -6,6 +6,13 @@ import json
 from .utils import *
 
 class NpEncoder(json.JSONEncoder):
+
+    """
+    
+    Encoder for json files saving.
+    
+    """
+
     def default(self, obj):
         if isinstance(obj, np.integer):
             return int(obj)
@@ -31,6 +38,44 @@ def get_analysis(df_results_path,
                  order_stats='average-statistic',
                  order_better='decreasing',
                  dataset_column='dataset_name',):
+    
+    """
+    
+    Get analysis of all the pairwise and multi classifier comparisons and store them in analysis
+    python dictionary. With a boolean parameter, you can plot the 1v1 scatter results.
+
+    Parameters
+    ----------
+
+    df_results_path : str, the path to the csv file containing results
+    output_dir : str, default = './', the output directory for the results
+    used_statistic : str, default = 'Accuracy', one can imagine using error, time, memory etc. instead
+    save_as_json : bool, default = True, whether or not to save the python analysis dict
+                   into a json file format
+    plot_1v1_comparisons : bool, default = True, whether or not to plot the 1v1 scatter results
+
+
+    order_WinTieLoss : str, default = 'higher', the order on considering a win or a loss
+                       for a given statistics
+    includeProbaWinTieLoss : bool, default = False, condition whether or not include
+                             the bayesian test of [1] for a probabilistic win tie loss count
+    include_pvalue : bool, default = True, condition whether or not include a pvalue stats
+    pvalue_test : str, default = 'wilcoxon', the statistical test to produce the pvalue stats.
+    pvalue_correction : str, default = None, which correction to use for the pvalue significant test
+    pvalue_threshhold : float, default = 0.05, threshold for considering a comparison is significant
+                        or not. If pvalue < pvalue_threshhold -> comparison is significant.
+    used_mean : str, default = 'arithmetic', the mean used to comapre two classifiers.
+    bayesian_rope : float, default = 0.01, the rope used in case include_ProbaWinTieLoss is True
+    order_stats : str, default = 'average-statistic', the way to order the used_statistic, default
+                  setup orders by average statistic over all datasets
+    order_better : str, default = 'decreasing', by which order to sort stats, from best to worse
+    dataset_column : str, default = 'dataset_name', the name of the datasets column in the csv file
+
+    Returns
+    -------
+    analysis : python dictionary containing all extracted comparisons
+
+    """
 
     analysis = {
             'dataset-column' : dataset_column,
@@ -145,12 +190,33 @@ def get_analysis(df_results_path,
 def get_heatmap(analysis=None,
                 output_dir='./',
                 load_analysis=True,
-                colormap='Oranges',
+                colormap='coolwarm',
                 fig_size='auto',
                 font_size=17,
                 pixels_per_clf_hieght=3,
                 pixels_per_clf_width=3.5,
                 show_symetry=True):
+    
+    """
+    
+    Draw the heatmap 1v1 multi classifier comparison
+
+    Parameters
+    ----------
+    analysis : python dict, default = None, a python dictionary exrtracted using get_analysis function
+    output_dir : str, default = './', output directory for the results
+    load_analysis : bool, default = True, whether or not to load the analysis json file
+    colormap : str, default = 'coolwarm', the colormap used in matplotlib
+    fig_size : str ot tuple of two int, default = 'auto', the height and width of the figure,
+               if 'auto', use get_fig_size function in utils.py
+    font_size : int, default = 17, the font size of text
+    pixels_per_clf_hieght : float, default = 3, the number of pixels used per classifier in height
+                            inside each cell of the heatmap
+    pixels_per_clf_width : float, default = 3.5, the number of pixels used per classifier in width
+                           inside each cell of the heatmap
+    show_symetry : bool, default = True, whether or not to show the symetrical part of the heatmap
+    
+    """
 
     if analysis is None:
         
@@ -293,11 +359,32 @@ def get_line_heatmap(proposed_method,
                      analysis=None,
                      output_dir='./',
                      load_analysis=True,
-                     colormap='Oranges',
+                     colormap='coolwarm',
                      fig_size='auto',
                      font_size=17,
                      pixels_per_clf_hieght=10,
                      pixels_per_clf_width=3):
+
+    """
+    
+    Draw the heatline 1v1 multi classifier comparison of a proposed_method vs all other methods
+
+    Parameters
+    ----------
+    proposed_method : str, the proposed mehtod's name
+    analysis : python dict, default = None, a python dictionary exrtracted using get_analysis function
+    output_dir : str, default = './', output directory for the results
+    load_analysis : bool, default = True, whether or not to load the analysis json file
+    colormap : str, default = 'coolwarm', the colormap used in matplotlib
+    fig_size : str ot tuple of two int, default = 'auto', the height and width of the figure,
+               if 'auto', use get_fig_size function in utils.py
+    font_size : int, default = 17, the font size of text
+    pixels_per_clf_hieght : float, default = 10, the number of pixels used per classifier in height
+                            inside each cell of the heatline
+    pixels_per_clf_width : float, default = 3, the number of pixels used per classifier in width
+                           inside each cell of the heatline
+    
+    """
 
     plt.cla()
     plt.clf()
