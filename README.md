@@ -26,7 +26,7 @@ In the ```main.py``` file, set the:
 
 ### Extract Comparisons
 
-To extract the comparisons in a json format, the function ```get_analysis``` should be used as in [this line](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/b911733153dbc3d578e649c062385700e9a2146e/main.py#L8). Set the input parameters as ```save_json=True``` to save the ```analysis``` dictionary in json format into ```output_dir```. Information about the input parameters of the ```get_analysis``` function are available [here in the docstring](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/b911733153dbc3d578e649c062385700e9a2146e/ALTAMCBE/ALTAMCBE.py#L25).
+To extract the comparisons in a json format, the function ```get_analysis``` should be used as in [this line](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/b911733153dbc3d578e649c062385700e9a2146e/main.py#L8). Set the input parameters as ```save_json=True``` to save the ```analysis``` dictionary in json format into ```output_dir```. Information about the input parameters of the ```get_analysis``` function are available [here in the docstring](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/b911733153dbc3d578e649c062385700e9a2146e/ALTAMCBE/ALTAMCBE.py#L25). The resulted analysis are stored in the json file found [here](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/analysis.json).
 
 ### Plot the HeatMap
 
@@ -40,4 +40,12 @@ To plot the full HeatMap, use the function ```get_line_heatmap``` as in [this li
 
 Generating the HeatMap on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) produces the following.
 
+<p align="center" width="100%">
+<img src="heatmap-1.png" alt="heatmap-example"/>
+</p>
+
 Generating the HeatLine on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) using a proposed method as clf3 produces the following.
+
+<p align="center" width="100%">
+<img src="clf3_heatline-1.png" alt="heatline-clf3-example"/>
+</p>
