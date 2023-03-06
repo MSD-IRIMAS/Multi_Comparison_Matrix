@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 import os
-from scipy.stats.mstats import gmean
 from scipy.stats import wilcoxon
 from baycomp import SignedRankTest
 

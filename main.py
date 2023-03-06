@@ -14,10 +14,4 @@ if __name__ == "__main__":
                          colormap='coolwarm',
                          show_symetry=True)
 
-    # ALTAMCBE.get_distribution_with_gmean(df_results_path=path_res, analysis=analysis, output_dir=output_dir)
-
     ALTAMCBE.get_line_heatmap(proposed_method='clf3', output_dir=output_dir, colormap='coolwarm',pixels_per_clf_hieght=7)
-    # ALTAMCBE.get_line_heatmap(proposed_method='CFLITETime', output_dir=output_dir, colormap='coolwarm')
-    # ALTAMCBE.get_line_heatmap(proposed_method='NBN', output_dir=output_dir, colormap='coolwarm')
-    # ALTAMCBE.get_line_heatmap(proposed_method='NBNTime', output_dir=output_dir, colormap='coolwarm')
-
