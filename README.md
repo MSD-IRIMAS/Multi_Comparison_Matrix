@@ -49,3 +49,13 @@ Generating the HeatLine on the [following example](https://github.com/MSD-IRIMAS
 <p align="center" width="100%">
 <img src="clf3_heatline-1.png" alt="heatline-clf3-example"/>
 </p>
+
+## Requirements
+
+The following python packages are required for the usage of the module:
+
+1. ```numpy==1.23.5```
+2. ```pandas==1.5.2```
+3. ```matplotlib==3.6.2```
+4. ```scipy==1.10.0```
+5. ```baycomp==1.0```
