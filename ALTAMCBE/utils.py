@@ -423,13 +423,13 @@ def plot_1v1(x,
     ax.set_ylim(0.0,1.0)
     ax.set_aspect('equal', adjustable='box')
 
-    ax.set_xlabel(name_x, fontsize=20)
-    ax.set_ylabel(name_y, fontsize=20)
+    ax.set_xlabel(name_y, fontsize=20)
+    ax.set_ylabel(name_x, fontsize=20)
 
     legend_elements = [
-        mpl.lines.Line2D([],[], marker='o', color='blue', label='Win '+str(loss_x), linestyle='None'),
+        mpl.lines.Line2D([],[], marker='o', color='blue', label='Win '+str(win_x), linestyle='None'),
         mpl.lines.Line2D([],[], marker='o', color='green', label='Tie '+str(tie), linestyle='None'),
-        mpl.lines.Line2D([],[], marker='o', color='orange', label='Loss '+str(win_x), linestyle='None'),
+        mpl.lines.Line2D([],[], marker='o', color='orange', label='Loss '+str(loss_x), linestyle='None'),
         mpl.lines.Line2D([],[], marker=' ', color='none', label='P-Value '+str(round(wilcoxon(x=x,y=y,zero_method='pratt')[1],4)))
     ]
 
