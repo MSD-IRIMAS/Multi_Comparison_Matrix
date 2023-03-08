@@ -328,7 +328,7 @@ def get_heatmap(analysis=None,
     cbar.ax.tick_params(labelsize=font_size)
     cbar.set_label(label=analysis['used-mean'], size=font_size, weight='bold')
 
-    ticks = get_ticks(analysis, round_number=4)
+    ticks = get_ticks(analysis)
 
     ax.set_xticks(np.arange(analysis['n-classifiers']), labels=ticks, fontsize=font_size)
     ax.set_yticks(np.arange(analysis['n-classifiers']), labels=ticks, fontsize=font_size)
@@ -488,7 +488,7 @@ def get_line_heatmap(proposed_method,
     cbar.ax.tick_params(labelsize=font_size)
     cbar.set_label(label=analysis['used-mean'], size=font_size*0.7, weight='bold')
 
-    xticks, yticks = get_ticks_heatline(analysis=analysis, proposed_method=proposed_method, round_number=4)
+    xticks, yticks = get_ticks_heatline(analysis=analysis, proposed_method=proposed_method)
 
     ax.set_xticks(np.arange(len(names_classifiers)), labels=xticks, fontsize=font_size)
     ax.set_yticks(np.arange(1), labels=yticks, fontsize=font_size)
