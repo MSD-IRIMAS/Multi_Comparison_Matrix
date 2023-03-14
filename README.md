@@ -41,13 +41,13 @@ To plot the full HeatMap, use the function ```get_line_heatmap``` as in [this li
 Generating the HeatMap on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) produces the following.
 
 <p align="center" width="100%">
-<img src="heatmap-1.png" alt="heatmap-example"/>
+<img src="heatmap.png" alt="heatmap-example"/>
 </p>
 
 Generating the HeatLine on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) using a proposed method as clf3 produces the following.
 
 <p align="center" width="100%">
-<img src="clf3_heatline-1.png" alt="heatline-clf3-example"/>
+<img src="clf3_heatline.png" alt="heatline-clf3-example"/>
 </p>
 
 ## Requirements
