@@ -1,4 +1,4 @@
-# Multi Pairwise Comparison
+# Multi Comparison Matrix (MCM)
 
 ### A Long Term Approach to Benchmark Evaluations
 
