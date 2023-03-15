@@ -192,7 +192,7 @@ def get_heatmap(analysis=None,
                 load_analysis=True,
                 colormap='coolwarm',
                 fig_size='auto',
-                font_size=17,
+                font_size='auto',
                 pixels_per_clf_hieght=3,
                 pixels_per_clf_width=3.5,
                 show_symetry=True,
@@ -323,6 +323,20 @@ def get_heatmap(analysis=None,
                            pixels_per_clf_hieght=pixels_per_clf_hieght,
                            n_info_per_line=n_info_per_line)
 
+    if font_size == 'auto':
+
+        font_size = analysis['n-classifiers'] * 2.5
+
+        if colorbar_orientation == 'horizontal':
+            font_size_colorbar_label = font_size * 1.5
+        else:
+            font_size_colorbar_label = font_size * 1.5
+        
+    else:
+
+        font_size = font_size
+        font_size_colorbar_label = font_size
+
     plt.rcParams["figure.autolayout"] = True
     fig, ax = plt.subplots(1, 1, figsize=(figsize[0], figsize[1]))
 
@@ -336,7 +350,7 @@ def get_heatmap(analysis=None,
 
     cbar = ax.figure.colorbar(im, ax=ax, orientation=colorbar_orientation)
     cbar.ax.tick_params(labelsize=font_size)
-    cbar.set_label(label=analysis['used-mean'], size=font_size, weight='bold')
+    cbar.set_label(label=analysis['used-mean'], size=font_size_colorbar_label)
 
     ticks = get_ticks(analysis)
 
@@ -371,7 +385,7 @@ def get_line_heatmap(proposed_method,
                      load_analysis=True,
                      colormap='coolwarm',
                      fig_size='auto',
-                     font_size=17,
+                     font_size='auto',
                      pixels_per_clf_hieght=5,
                      pixels_per_clf_width=3,
                      colorbar_orientation='horizontal'):
@@ -389,11 +403,14 @@ def get_line_heatmap(proposed_method,
     colormap : str, default = 'coolwarm', the colormap used in matplotlib
     fig_size : str ot tuple of two int, default = 'auto', the height and width of the figure,
                if 'auto', use get_fig_size function in utils.py
-    font_size : int, default = 17, the font size of text
+    font_size : int, default = 'auto', the font size of text will be automatically calculated with
+                respect to the number of approaches included in the comparison study
     pixels_per_clf_hieght : float, default = 10, the number of pixels used per classifier in height
                             inside each cell of the heatline
     pixels_per_clf_width : float, default = 3, the number of pixels used per classifier in width
                            inside each cell of the heatline
+    colorbar_orientation : str, default = 'vertical', in which orientation to show the colorbar
+                           either horizontal or vertical
     
     """
 
@@ -484,6 +501,20 @@ def get_line_heatmap(proposed_method,
                            pixels_per_clf_hieght=pixels_per_clf_hieght,
                            n_info_per_line=n_info_per_line)
 
+    if font_size == 'auto':
+
+        font_size = len(names_classifiers) * 2.5
+
+        if colorbar_orientation == 'horizontal':
+            font_size_colorbar_label = font_size * 1.5
+        else:
+            font_size_colorbar_label = font_size
+        
+    else:
+
+        font_size = font_size
+        font_size_colorbar_label = font_size
+
     plt.rcParams["figure.autolayout"] = True
     fig, ax = plt.subplots(1, 1, figsize=(figsize[0], figsize[1]))
 
@@ -497,7 +528,7 @@ def get_line_heatmap(proposed_method,
 
     cbar = ax.figure.colorbar(im, ax=ax, orientation=colorbar_orientation)
     cbar.ax.tick_params(labelsize=font_size)
-    cbar.set_label(label=analysis['used-mean'], size=font_size*0.7, weight='bold')
+    cbar.set_label(label=analysis['used-mean'], size=font_size_colorbar_label)
 
     xticks, yticks = get_ticks_heatline(analysis=analysis, proposed_method=proposed_method)
 
