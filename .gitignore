@@ -7,6 +7,11 @@ __pycache__/
 *.so
 *.pdf
 *.json
+*.csv
+*.png
+!results_example.csv
+!heatmap.png
+!clf3_heatline.png
 
 # Distribution / packaging
 .Python
