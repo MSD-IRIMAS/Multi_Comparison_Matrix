@@ -44,7 +44,11 @@ Generating the HeatMap on the [following example](https://github.com/MSD-IRIMAS/
 <img src="heatmap.png" alt="heatmap-example"/>
 </p>
 
-Generating the HeatLine on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) using a proposed method as clf3 produces the following.
+Generating the HeatLine on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) using proposed methods as clf1 andclf3 in a disjoint manner produces the following.
+
+<p align="center" width="100%">
+<img src="clf1_heatline.png" alt="heatline-clf1-example"/>
+</p>
 
 <p align="center" width="100%">
 <img src="clf3_heatline.png" alt="heatline-clf3-example"/>
