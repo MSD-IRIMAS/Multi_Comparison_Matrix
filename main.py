@@ -10,9 +10,9 @@ if __name__ == "__main__":
                                      plot_1v1_comparisons=False,
                                      output_dir=output_dir)
     
-    MCM.get_heatmap(output_dir=output_dir,
-                         colormap='coolwarm',
-                         show_symetry=True,
-                         colorbar_orientation='vertical')
+    # MCM.get_heatmap(output_dir=output_dir,
+    #                      colormap='coolwarm',
+    #                      show_symetry=True,
+    #                      colorbar_orientation='vertical')
 
-    # MCM.get_line_heatmap(proposed_method='clf3', output_dir=output_dir, colormap='coolwarm',pixels_per_clf_hieght=7)
+    MCM.get_line_heatmap(proposed_method='ROCKET', output_dir=output_dir, colormap='coolwarm',pixels_per_clf_hieght=7)

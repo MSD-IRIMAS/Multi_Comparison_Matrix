@@ -372,8 +372,9 @@ def get_line_heatmap(proposed_method,
                      colormap='coolwarm',
                      fig_size='auto',
                      font_size=17,
-                     pixels_per_clf_hieght=10,
-                     pixels_per_clf_width=3):
+                     pixels_per_clf_hieght=5,
+                     pixels_per_clf_width=3,
+                     colorbar_orientation='horizontal'):
 
     """
     
@@ -494,7 +495,7 @@ def get_line_heatmap(proposed_method,
                    vmin=min_value + 0.20*min_value,
                    vmax=max_value + 0.2*max_value)
 
-    cbar = ax.figure.colorbar(im, ax=ax)
+    cbar = ax.figure.colorbar(im, ax=ax, orientation=colorbar_orientation)
     cbar.ax.tick_params(labelsize=font_size)
     cbar.set_label(label=analysis['used-mean'], size=font_size*0.7, weight='bold')
 
