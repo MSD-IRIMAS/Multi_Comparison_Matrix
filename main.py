@@ -14,4 +14,4 @@ if __name__ == "__main__":
                          colormap='coolwarm',
                          show_symetry=True)
 
-    # MCM.get_line_heatmap(proposed_method='ROCKET', output_dir=output_dir, colormap='coolwarm',pixels_per_clf_hieght=7)
+    MCM.get_line_heatmap(proposed_method='ROCKET', output_dir=output_dir, colormap='coolwarm',pixels_per_clf_hieght=7)

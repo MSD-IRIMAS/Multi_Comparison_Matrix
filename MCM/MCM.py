@@ -34,7 +34,7 @@ def get_analysis(df_results_path,
                  pvalue_test='wilcoxon',
                  pvalue_correction=None,
                  pvalue_threshhold=0.05,
-                 used_mean='arithmetic-mean',
+                 used_mean='mean-difference',
                  order_stats='average-statistic',
                  order_better='decreasing',
                  dataset_column='dataset_name',):
@@ -64,7 +64,7 @@ def get_analysis(df_results_path,
     pvalue_correction : str, default = None, which correction to use for the pvalue significant test
     pvalue_threshhold : float, default = 0.05, threshold for considering a comparison is significant
                         or not. If pvalue < pvalue_threshhold -> comparison is significant.
-    used_mean : str, default = 'arithmetic', the mean used to comapre two classifiers.
+    used_mean : str, default = 'mean-difference', the mean used to comapre two classifiers.
     bayesian_rope : float, default = 0.01, the rope used in case include_ProbaWinTieLoss is True
     order_stats : str, default = 'average-statistic', the way to order the used_statistic, default
                   setup orders by average statistic over all datasets
@@ -352,10 +352,10 @@ def get_heatmap(analysis=None,
     cbar.ax.tick_params(labelsize=font_size)
     cbar.set_label(label=analysis['used-mean'], size=font_size_colorbar_label)
 
-    ticks = get_ticks(analysis)
+    xticks, yticks = get_ticks(analysis)
 
-    ax.set_xticks(np.arange(analysis['n-classifiers']), labels=ticks, fontsize=font_size)
-    ax.set_yticks(np.arange(analysis['n-classifiers']), labels=ticks, fontsize=font_size)
+    ax.set_xticks(np.arange(analysis['n-classifiers']), labels=xticks, fontsize=font_size)
+    ax.set_yticks(np.arange(analysis['n-classifiers']), labels=yticks, fontsize=font_size)
 
     ax.tick_params(top=True, bottom=False, labeltop=True, labelbottom=False)
     ax.spines[:].set_visible(False)

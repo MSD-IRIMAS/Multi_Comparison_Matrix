@@ -7,6 +7,12 @@ import os
 from scipy.stats import wilcoxon
 from baycomp import SignedRankTest
 
+stats_mapping = {
+
+    "mean-"
+
+}
+
 def decode_results_data_frame(df, analysis):
     """
     
@@ -52,7 +58,7 @@ def get_pairwise_content(x,
                          pvalue_test='wilcoxon',
                          pvalue_correction=None,
                          pvalue_threshhold=0.05,
-                         used_mean='arithmetic-mean',
+                         used_mean='mean-difference',
                          bayesian_rope=0.01):
 
     """
@@ -76,7 +82,7 @@ def get_pairwise_content(x,
     pvalue_correction : str, default = None, which correction to use for the pvalue significant test
     pvalue_threshhold : float, default = 0.05, threshold for considering a comparison is significant
                         or not. If pvalue < pvalue_threshhold -> comparison is significant.
-    used_mean : str, default = 'arithmetic', the mean used to comapre two classifiers.
+    used_mean : str, default = 'mean-difference', the mean used to comapre two classifiers.
     bayesian_rope : float, default = 0.01, the rope used in case include_ProbaWinTieLoss is True
 
     Returns
@@ -127,7 +133,7 @@ def get_pairwise_content(x,
         content['p-y-wins'] = p_y_wins
         content['p-rope'] = p_rope
 
-    if used_mean == 'arithmetic-mean':
+    if used_mean == 'mean-difference':
 
         content['mean'] = np.mean(x) - np.mean(y)
 
@@ -222,12 +228,14 @@ def get_ticks(analysis):
 
     Returns
     -------
-
-    ticks : list of str, containing the tick labels for each classifer
     
+    xticks : list of str, containing the tick labels for each classifer
+    yticks : list of only one str, containing one tick of the classifier in question (proposed_method)
+
     """
 
-    ticks = []
+    xticks = []
+    yticks = []
 
     if analysis['order-stats'] == 'average-statistic':
         ordering = 'average-'+analysis['used-statistics']
@@ -235,9 +243,10 @@ def get_ticks(analysis):
         ordering = analysis['order-stats']
 
     for i in range(analysis['n-classifiers']):
-        ticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + '\n' + str(round(analysis['ordered-stats'][i], 4)))
+        yticks.append(analysis['ordered-classifier-names'][i])
+        xticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + '\n' + str(round(analysis['ordered-stats'][i], 4)))
 
-    return ticks
+    return xticks, yticks
 
 def get_ticks_heatline(analysis, proposed_method):
 
