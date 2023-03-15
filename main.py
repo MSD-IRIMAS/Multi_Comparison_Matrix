@@ -16,12 +16,9 @@ if __name__ == "__main__":
     
     MCM.get_heatmap(output_dir=output_dir,
                          colormap='coolwarm',
-                         colorbar_value='win',
                          show_symetry=True)
 
     MCM.get_line_heatmap(proposed_methods=['ROCKET','ResNet'],
                          df_results=df_results,
                          disjoint_methods=True,
-                         output_dir=output_dir,
-                         colormap='coolwarm',
-                         colorbar_value='win')
+                         output_dir=output_dir)

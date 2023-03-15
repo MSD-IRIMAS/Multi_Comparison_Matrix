@@ -335,7 +335,7 @@ def get_heatmap(analysis=None,
 
     if font_size == 'auto':
 
-        font_size = analysis['n-classifiers'] * 2.5
+        font_size = max(analysis['n-classifiers'] * 3, 15)
 
         if colorbar_orientation == 'horizontal':
             font_size_colorbar_label = font_size * 1.5
@@ -678,7 +678,7 @@ def _get_line_heatmap(proposed_method,
 
     if font_size == 'auto':
 
-        font_size = len(names_classifiers) * 2.5
+        font_size = max(len(names_classifiers) * 3, 10)
 
         if colorbar_orientation == 'horizontal':
             font_size_colorbar_label = font_size * 1.5
