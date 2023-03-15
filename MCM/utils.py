@@ -206,6 +206,19 @@ def re_order_classifiers(df_results, analysis):
                     ameans.append(analysis[analysis['classifier-names'][i]+'-vs-'+analysis['classifier-names'][j]]['mean'])
             
             stats.append(np.mean(ameans))
+    
+    elif analysis['order-stats'] == 'pvalue':
+
+        for i in range(analysis['n-classifiers']):
+
+            pvalues = []
+            
+            for j in range(analysis['n-classifiers']):
+
+                if i != j:
+                    pvalues.append(analysis[analysis['classifier-names'][i]+'-vs-'+analysis['classifier-names'][j]]['pvalue'])
+        
+            stats.append(np.mean(pvalues))
 
     if analysis['order-better'] == 'increasing':
         ordered_indices = np.argsort(stats)

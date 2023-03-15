@@ -129,7 +129,8 @@ def get_analysis(df_results_path,
                             output_directory=output_dir)
 
 
-    analysis['average-statistic'] = average_statistic
+    if order_stats == 'average-statistic':
+        analysis['average-statistic'] = average_statistic
 
     if pvalue_correction == 'Holm':
 

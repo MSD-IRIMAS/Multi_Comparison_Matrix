@@ -8,7 +8,8 @@ if __name__ == "__main__":
     analysis = MCM.get_analysis(df_results_path=path_res,
                                      save_as_json=True,
                                      plot_1v1_comparisons=False,
-                                     output_dir=output_dir)
+                                     output_dir=output_dir,
+                                     order_stats='pvalue')
     
     MCM.get_heatmap(output_dir=output_dir,
                          colormap='coolwarm',
