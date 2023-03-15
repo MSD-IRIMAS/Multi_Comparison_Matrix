@@ -208,7 +208,10 @@ def get_heatmap(analysis=None,
     analysis : python dict, default = None, a python dictionary exrtracted using get_analysis function
     output_dir : str, default = './', output directory for the results
     load_analysis : bool, default = True, whether or not to load the analysis json file
-    colormap : str, default = 'coolwarm', the colormap used in matplotlib
+    colormap : str, default = 'coolwarm', the colormap used in matplotlib, if set to None,
+                    no color map is used and the heatmap is turned off, no colors will be seen
+    colorbar_value : str, default = 'mean-difference', the values for which the heat map colors
+                        are based on
     fig_size : str ot tuple of two int, default = 'auto', the height and width of the figure,
                if 'auto', use get_fig_size function in utils.py
     font_size : int, default = 17, the font size of text
@@ -438,7 +441,10 @@ def get_line_heatmap(proposed_methods,
     analysis : python dict, default = None, a python dictionary exrtracted using get_analysis function
     output_dir : str, default = './', output directory for the results
     load_analysis : bool, default = True, whether or not to load the analysis json file
-    colormap : str, default = 'coolwarm', the colormap used in matplotlib
+    colormap : str, default = 'coolwarm', the colormap used in matplotlib, if set to None,
+                    no color map is used and the heatmap is turned off, no colors will be seen
+    colorbar_value : str, default = 'mean-difference', the values for which the heat map colors
+                        are based on
     fig_size : str ot tuple of two int, default = 'auto', the height and width of the figure,
                if 'auto', use get_fig_size function in utils.py
     font_size : int, default = 'auto', the font size of text will be automatically calculated with
@@ -538,7 +544,10 @@ def _get_line_heatmap(proposed_method,
     analysis : python dict, default = None, a python dictionary exrtracted using get_analysis function
     output_dir : str, default = './', output directory for the results
     load_analysis : bool, default = True, whether or not to load the analysis json file
-    colormap : str, default = 'coolwarm', the colormap used in matplotlib
+    colormap : str, default = 'coolwarm', the colormap used in matplotlib, if set to None,
+                    no color map is used and the heatmap is turned off, no colors will be seen
+    colorbar_value : str, default = 'mean-difference', the values for which the heat map colors
+                        are based on
     fig_size : str ot tuple of two int, default = 'auto', the height and width of the figure,
                if 'auto', use get_fig_size function in utils.py
     font_size : int, default = 'auto', the font size of text will be automatically calculated with
