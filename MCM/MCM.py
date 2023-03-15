@@ -196,7 +196,8 @@ def get_heatmap(analysis=None,
                 pixels_per_clf_hieght=3,
                 pixels_per_clf_width=3.5,
                 show_symetry=True,
-                colorbar_orientation='vertical'):
+                colorbar_orientation='vertical',
+                colorbar_value=None):
     
     """
     
@@ -246,7 +247,6 @@ def get_heatmap(analysis=None,
 
     for i in range(analysis['n-classifiers']):
 
-
         dict_to_add = {'Classifier' : analysis['ordered-classifier-names'][i]}
 
         if i == 0:
@@ -260,8 +260,15 @@ def get_heatmap(analysis=None,
             if i != j:
 
                 n_info_per_line = 0
-                pairwise_matrix[i,j] = analysis[analysis['ordered-classifier-names'][i]+'-vs-'+analysis['ordered-classifier-names'][j]]['mean']
-                
+
+                if colormap is not None:
+                    if colorbar_value is None:
+                        pairwise_matrix[i,j] = analysis[analysis['ordered-classifier-names'][i]+'-vs-'+analysis['ordered-classifier-names'][j]]['mean']
+                    else:
+                        pairwise_matrix[i,j] = analysis[analysis['ordered-classifier-names'][i]+'-vs-'+analysis['ordered-classifier-names'][j]][colorbar_value]
+                else:
+                    pairwise_matrix[i,j] = 0
+
                 pairwise_content = analysis[analysis['ordered-classifier-names'][i]+'-vs-'+analysis['ordered-classifier-names'][j]]
                 pairwise_keys = list(pairwise_content.keys())
 
@@ -303,7 +310,7 @@ def get_heatmap(analysis=None,
             for j in range(i+1):
 
                 dict_to_add[analysis['ordered-classifier-names'][j]] = '-'
-                pairwise_matrix[i,j] = 0.0
+                pairwise_matrix[i,j] = 0
         
         if show_symetry:
             pairwise_matrix[i,i] = 0.0
@@ -342,15 +349,26 @@ def get_heatmap(analysis=None,
 
     min_value, max_value = get_limits(pairwise_matrix=pairwise_matrix)
 
-    im = ax.imshow(pairwise_matrix,
-                   cmap=colormap,
-                   aspect='auto',
-                   vmin=min_value + 0.2*min_value,
-                   vmax=max_value + 0.2*max_value)
+    if colormap is None:
+        _colormap = 'coolwarm'
+        _vmin = -2
+        _vmax = 2
+    else:
+        _colormap = colormap
+        _vmin = min_value + 0.2*min_value
+        _vmax = max_value + 0.2*max_value
 
-    cbar = ax.figure.colorbar(im, ax=ax, orientation=colorbar_orientation)
-    cbar.ax.tick_params(labelsize=font_size)
-    cbar.set_label(label=analysis['used-mean'], size=font_size_colorbar_label)
+
+    im = ax.imshow(pairwise_matrix,
+                   cmap=_colormap,
+                   aspect='auto',
+                   vmin=_vmin,
+                   vmax=_vmax)
+
+    if colormap is not None:
+        cbar = ax.figure.colorbar(im, ax=ax, orientation=colorbar_orientation)
+        cbar.ax.tick_params(labelsize=font_size)
+        cbar.set_label(label=analysis['used-mean'], size=font_size_colorbar_label)
 
     xticks, yticks = get_ticks(analysis)
 
@@ -386,6 +404,7 @@ def get_line_heatmap(proposed_methods,
                      output_dir='./',
                      load_analysis=True,
                      colormap='coolwarm',
+                     colorbar_value=None,
                      fig_size='auto',
                      font_size='auto',
                      pixels_per_clf_hieght=7,
@@ -462,6 +481,7 @@ def get_line_heatmap(proposed_methods,
                           output_dir=output_dir,
                           load_analysis=load_analysis,
                           colormap=colormap,
+                          colorbar_value=colorbar_value,
                           fig_size=fig_size,
                           font_size=font_size,
                           pixels_per_clf_hieght=pixels_per_clf_hieght,
@@ -487,6 +507,7 @@ def _get_line_heatmap(proposed_method,
                       output_dir='./',
                       load_analysis=True,
                       colormap='coolwarm',
+                      colorbar_value=None,
                       fig_size='auto',
                       font_size='auto',
                       pixels_per_clf_hieght=7,
@@ -593,8 +614,16 @@ def _get_line_heatmap(proposed_method,
 
             n_info_per_line = 0
 
-            pairwise_line[0,i] = analysis[proposed_method+'-vs-'+names_classifiers[i]]['mean']
+            # pairwise_line[0,i] = analysis[proposed_method+'-vs-'+names_classifiers[i]]['mean']
                     
+            if colormap is not None:
+                if colorbar_value is None:
+                    pairwise_line[0,i] = analysis[proposed_method+'-vs-'+analysis['ordered-classifier-names'][i]]['mean']
+                else:
+                    pairwise_line[0,i] = analysis[proposed_method+'-vs-'+analysis['ordered-classifier-names'][i]][colorbar_value]
+            else:
+                pairwise_line[0,i] = 0
+
             pairwise_content = analysis[proposed_method+'-vs-'+names_classifiers[i]]
             pairwise_keys = list(pairwise_content.keys())
 
@@ -657,15 +686,30 @@ def _get_line_heatmap(proposed_method,
 
     min_value, max_value = get_limits(pairwise_matrix=pairwise_line)
 
-    im = ax.imshow(pairwise_line,
-                   cmap=colormap,
-                   aspect='auto',
-                   vmin=min_value + 0.20*min_value,
-                   vmax=max_value + 0.2*max_value)
+    if colormap is None:
+        _colormap = 'coolwarm'
+        _vmin = -2
+        _vmax = 2
+    else:
+        _colormap = colormap
+        _vmin = min_value + 0.2*min_value
+        _vmax = max_value + 0.2*max_value
+    
+    if colorbar_value is None:
+        _colorbar_value = 'mean-difference'
+    else:
+        _colorbar_value = colorbar_value
 
-    cbar = ax.figure.colorbar(im, ax=ax, orientation=colorbar_orientation)
-    cbar.ax.tick_params(labelsize=font_size)
-    cbar.set_label(label=analysis['used-mean'], size=font_size_colorbar_label)
+    im = ax.imshow(pairwise_line,
+                   cmap=_colormap,
+                   aspect='auto',
+                   vmin=_vmin,
+                   vmax=_vmax)
+
+    if colormap is not None:
+        cbar = ax.figure.colorbar(im, ax=ax, orientation=colorbar_orientation)
+        cbar.ax.tick_params(labelsize=font_size)
+        cbar.set_label(label=_colorbar_value, size=font_size_colorbar_label)
 
     xticks, yticks = get_ticks_heatline(analysis=analysis, proposed_method=proposed_method)
 

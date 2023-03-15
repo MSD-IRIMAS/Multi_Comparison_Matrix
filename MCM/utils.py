@@ -338,6 +338,9 @@ def get_limits(pairwise_matrix):
         min_value = round(np.min(pairwise_matrix), 4)
         max_value = round(np.max(pairwise_matrix), 4)
 
+        if min_value >= 0 and max_value >= 0:
+            return min_value, max_value
+
         return - max(abs(min_value),abs(max_value)), max(abs(min_value),abs(max_value))
 
     min_value = 1e9
