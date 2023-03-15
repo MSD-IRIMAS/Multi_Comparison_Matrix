@@ -284,12 +284,17 @@ def get_ticks_heatline(analysis, proposed_method):
     xticks = []
     yticks = []
 
+    if analysis['order-stats'] == 'average-statistic':
+        ordering = 'average-'+analysis['used-statistics']
+    else:
+        ordering = analysis['order-stats']
+
     for i in range(analysis['n-classifiers']):
 
         if analysis['ordered-classifier-names'][i] == proposed_method:
             yticks.append(proposed_method + ' VS')
         
-        xticks.append(analysis['ordered-classifier-names'][i] + '\n' + analysis['order-stats'] + '\n' + str(round(analysis['ordered-stats'][i], 4)))
+        xticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + '\n' + str(round(analysis['ordered-stats'][i], 4)))
         
     return xticks, yticks
 
