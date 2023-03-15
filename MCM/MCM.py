@@ -195,7 +195,8 @@ def get_heatmap(analysis=None,
                 font_size=17,
                 pixels_per_clf_hieght=3,
                 pixels_per_clf_width=3.5,
-                show_symetry=True):
+                show_symetry=True,
+                colorbar_orientation='vertical'):
     
     """
     
@@ -215,8 +216,13 @@ def get_heatmap(analysis=None,
     pixels_per_clf_width : float, default = 3.5, the number of pixels used per classifier in width
                            inside each cell of the heatmap
     show_symetry : bool, default = True, whether or not to show the symetrical part of the heatmap
+    colorbar_orientation : str, default = 'vertical', in which orientation to show the colorbar
+                           either horizontal or vertical
     
     """
+
+    if colorbar_orientation == 'horizontal':
+        pixels_per_clf_hieght = 2.5
 
     if analysis is None:
         
@@ -236,7 +242,7 @@ def get_heatmap(analysis=None,
     string_to_add = string_to_add + analysis['used-mean'] + '\n'
     string_to_add = string_to_add + 'Win/Tie/Loss ' + analysis['order-WinTieLoss'] + '\n'
     if analysis['include-pvalue']:
-        string_to_add = string_to_add + analysis['pvalue-test'] + ' p-value'
+        string_to_add = string_to_add + analysis['pvalue-test'].capitalize() + ' p-value'
 
     for i in range(analysis['n-classifiers']):
 
@@ -284,7 +290,11 @@ def get_heatmap(analysis=None,
                 if 'pvalue' in pairwise_keys:
 
                     string_to_add = string_to_add 
-                    string_to_add = string_to_add + str(round(pairwise_content['pvalue'],4))
+                    _p_value = round(pairwise_content['pvalue'],4)
+                    if _p_value == 0:
+                        string_to_add = string_to_add + "< " + str(1e-4)
+                    else:
+                        string_to_add = string_to_add + str(_p_value)
                     n_info_per_line += 1
 
                 dict_to_add[analysis['ordered-classifier-names'][j]] = string_to_add
@@ -324,7 +334,7 @@ def get_heatmap(analysis=None,
                    vmin=min_value + 0.2*min_value,
                    vmax=max_value + 0.2*max_value)
 
-    cbar = ax.figure.colorbar(im, ax=ax)
+    cbar = ax.figure.colorbar(im, ax=ax, orientation=colorbar_orientation)
     cbar.ax.tick_params(labelsize=font_size)
     cbar.set_label(label=analysis['used-mean'], size=font_size, weight='bold')
 
