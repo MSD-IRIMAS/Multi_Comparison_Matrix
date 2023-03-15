@@ -22,7 +22,7 @@ class NpEncoder(json.JSONEncoder):
             return obj.tolist()
         return super(NpEncoder, self).default(obj)
 
-def get_analysis(df_results_path,
+def get_analysis(df_results,
                  output_dir='./',
                  used_statistic='Accuracy',
                  save_as_json=True,
@@ -47,7 +47,7 @@ def get_analysis(df_results_path,
     Parameters
     ----------
 
-    df_results_path : str, the path to the csv file containing results
+    df_results : pandas DataFrame, the csv file containing results
     output_dir : str, default = './', the output directory for the results
     used_statistic : str, default = 'Accuracy', one can imagine using error, time, memory etc. instead
     save_as_json : bool, default = True, whether or not to save the python analysis dict
@@ -88,7 +88,6 @@ def get_analysis(df_results_path,
             'pvalue-test' : pvalue_test
         }
 
-    df_results = pd.read_csv(df_results_path)
     decode_results_data_frame(df=df_results, analysis=analysis)
 
     if order_stats == 'average-statistic':
@@ -380,24 +379,43 @@ def get_heatmap(analysis=None,
     plt.clf()
     plt.close()
 
-def get_line_heatmap(proposed_method,
+def get_line_heatmap(proposed_methods,
+                     disjoint_methods=False,
+                     df_results=None,
                      analysis=None,
                      output_dir='./',
                      load_analysis=True,
                      colormap='coolwarm',
                      fig_size='auto',
                      font_size='auto',
-                     pixels_per_clf_hieght=5,
-                     pixels_per_clf_width=3,
-                     colorbar_orientation='horizontal'):
+                     pixels_per_clf_hieght=7,
+                     pixels_per_clf_width=2.5,
+                     colorbar_orientation='horizontal',
+                     used_statistic='Accuracy',
+                     order_WinTieLoss='higher',
+                     include_ProbaWinTieLoss=False,
+                     bayesian_rope=0.01,
+                     include_pvalue=True,
+                     pvalue_test='wilcoxon',
+                     pvalue_correction=None,
+                     pvalue_threshhold=0.05,
+                     used_mean='mean-difference',
+                     order_stats='average-statistic',
+                     order_better='decreasing',
+                     dataset_column='dataset_name',):
 
     """
     
-    Draw the heatline 1v1 multi classifier comparison of a proposed_method vs all other methods
+    Draw the heatline 1v1 multi classifier comparison of some proposed_methods vs all other methods
+    with the option of disjoint methods
 
     Parameters
     ----------
-    proposed_method : str, the proposed mehtod's name
+    proposed_methods : str or list of str, the proposed mehtod(s)' name(s)
+    disjoint_methods : bool, default = False, whether or not disjoint mehtods exists in the
+                       proposed methods list
+    df_results : pandas DataFrame, default = None, the csv file containing the results, this
+                        parameter is necessary if disjoint_methods is set to True
     analysis : python dict, default = None, a python dictionary exrtracted using get_analysis function
     output_dir : str, default = './', output directory for the results
     load_analysis : bool, default = True, whether or not to load the analysis json file
@@ -413,12 +431,130 @@ def get_line_heatmap(proposed_method,
     colorbar_orientation : str, default = 'vertical', in which orientation to show the colorbar
                            either horizontal or vertical
     
+    NB: The rest of the parameters are the same in get_analysis function, they are used in case
+    excluded methods exist
+    
+    """
+    
+    if colorbar_orientation == 'vertical':
+        pixels_per_clf_hieght = 9
+    
+    if disjoint_methods:
+        assert df_results is not None
+
+    if not isinstance(proposed_methods, list):
+        proposed_methods = [proposed_methods]
+    
+    proposed_methods = np.asarray(proposed_methods)
+
+    excluded_methods = None
+    
+    for i in range(len(proposed_methods)):
+
+        if disjoint_methods:
+            excluded_methods = np.delete(arr=proposed_methods, obj=i)
+            excluded_methods = list(excluded_methods)
+
+        _get_line_heatmap(proposed_method=proposed_methods[i],
+                          excluded_methods=excluded_methods,
+                          df_results=df_results,
+                          analysis=analysis,
+                          output_dir=output_dir,
+                          load_analysis=load_analysis,
+                          colormap=colormap,
+                          fig_size=fig_size,
+                          font_size=font_size,
+                          pixels_per_clf_hieght=pixels_per_clf_hieght,
+                          pixels_per_clf_width=pixels_per_clf_width,
+                          colorbar_orientation=colorbar_orientation,
+                          used_statistic=used_statistic,
+                          order_WinTieLoss=order_WinTieLoss,
+                          used_mean=used_mean,
+                          order_stats=order_stats,
+                          order_better=order_better,
+                          include_ProbaWinTieLoss=include_ProbaWinTieLoss,
+                          bayesian_rope=bayesian_rope,
+                          include_pvalue=include_pvalue,
+                          pvalue_correction=pvalue_correction,
+                          pvalue_test=pvalue_test,
+                          pvalue_threshhold=pvalue_threshhold,
+                          dataset_column=dataset_column)
+
+def _get_line_heatmap(proposed_method,
+                      excluded_methods=None,
+                      df_results=None,
+                      analysis=None,
+                      output_dir='./',
+                      load_analysis=True,
+                      colormap='coolwarm',
+                      fig_size='auto',
+                      font_size='auto',
+                      pixels_per_clf_hieght=7,
+                      pixels_per_clf_width=2.5,
+                      colorbar_orientation='horizontal',
+                      used_statistic='Accuracy',
+                      order_WinTieLoss='higher',
+                      include_ProbaWinTieLoss=False,
+                      bayesian_rope=0.01,
+                      include_pvalue=True,
+                      pvalue_test='wilcoxon',
+                      pvalue_correction=None,
+                      pvalue_threshhold=0.05,
+                      used_mean='mean-difference',
+                      order_stats='average-statistic',
+                      order_better='decreasing',
+                      dataset_column='dataset_name',):
+
+    """
+    
+    Draw the heatline 1v1 multi classifier comparison of a proposed_method vs all other methods
+
+    Parameters
+    ----------
+    proposed_method : str, the proposed mehtod's name
+    excluded_methods : list of str, default = None, the methods to exclude from the study
+    df_results : pandas DataFrame, default = None, the csv file containing the results
+    analysis : python dict, default = None, a python dictionary exrtracted using get_analysis function
+    output_dir : str, default = './', output directory for the results
+    load_analysis : bool, default = True, whether or not to load the analysis json file
+    colormap : str, default = 'coolwarm', the colormap used in matplotlib
+    fig_size : str ot tuple of two int, default = 'auto', the height and width of the figure,
+               if 'auto', use get_fig_size function in utils.py
+    font_size : int, default = 'auto', the font size of text will be automatically calculated with
+                respect to the number of approaches included in the comparison study
+    pixels_per_clf_hieght : float, default = 10, the number of pixels used per classifier in height
+                            inside each cell of the heatline
+    pixels_per_clf_width : float, default = 3, the number of pixels used per classifier in width
+                           inside each cell of the heatline
+    colorbar_orientation : str, default = 'vertical', in which orientation to show the colorbar
+                           either horizontal or vertical
+    
+    NB: The rest of the parameters are the same in get_analysis function, they are used in case
+    excluded methods exist, the only difference is the default vallue of save_json, here set to False
+                           
     """
 
     plt.cla()
     plt.clf()
 
-    if analysis is None:
+    if excluded_methods is not None:
+
+        df_results = df_results.drop(columns=excluded_methods)
+        analysis = get_analysis(df_results=df_results, save_as_json=False,
+                                used_statistic=used_statistic,
+                                order_WinTieLoss=order_WinTieLoss,
+                                used_mean=used_mean,
+                                order_stats=order_stats,
+                                order_better=order_better,
+                                include_ProbaWinTieLoss=include_ProbaWinTieLoss,
+                                bayesian_rope=bayesian_rope,
+                                include_pvalue=include_pvalue,
+                                pvalue_correction=pvalue_correction,
+                                pvalue_test=pvalue_test,
+                                pvalue_threshhold=pvalue_threshhold,
+                                dataset_column=dataset_column)
+
+    elif analysis is None:
         
         if load_analysis:
             with open(output_dir + 'analysis.json') as json_file:
