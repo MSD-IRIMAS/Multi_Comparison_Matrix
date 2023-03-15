@@ -313,7 +313,7 @@ def get_sign(x):
 
     return 1 if x > 0 else -1
 
-def get_limits(pairwise_matrix):
+def get_limits(pairwise_matrix, can_be_negative=False):
 
     """
     
@@ -324,6 +324,8 @@ def get_limits(pairwise_matrix):
     ----------
     pairwise_matrix : ndarray, shape = (n_classifiers, n_classifiers), a matrix containing 
                       the 1v1 statistical values (by default: difference of arithmetic mean of stats)
+    can_be_negative : bool, default = False, whether or not the values can be negative to help
+                        the case of the heatline
     
     Returns
     -------
@@ -338,7 +340,7 @@ def get_limits(pairwise_matrix):
         min_value = round(np.min(pairwise_matrix), 4)
         max_value = round(np.max(pairwise_matrix), 4)
 
-        if min_value >= 0 and max_value >= 0:
+        if min_value >= 0 and max_value >= 0 and (not can_be_negative):
             return min_value, max_value
 
         return - max(abs(min_value),abs(max_value)), max(abs(min_value),abs(max_value))

@@ -693,7 +693,10 @@ def _get_line_heatmap(proposed_method,
     plt.rcParams["figure.autolayout"] = True
     fig, ax = plt.subplots(1, 1, figsize=(figsize[0], figsize[1]))
 
-    min_value, max_value = get_limits(pairwise_matrix=pairwise_line)
+    _can_be_negative = False
+    if colorbar_value is None or colorbar_value == 'mean-difference':
+        _can_be_negative = True
+    min_value, max_value = get_limits(pairwise_matrix=pairwise_line, can_be_negative=_can_be_negative)
 
     if colormap is None:
         _colormap = 'coolwarm'
