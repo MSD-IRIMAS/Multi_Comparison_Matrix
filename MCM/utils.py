@@ -255,9 +255,16 @@ def get_ticks(analysis):
     else:
         ordering = analysis['order-stats']
 
+    first_tick = True
+    ordering = ''
+
     for i in range(analysis['n-classifiers']):
         yticks.append(analysis['ordered-classifier-names'][i])
-        xticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + '\n' + str(round(analysis['ordered-stats'][i], 4)))
+        xticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + str(round(analysis['ordered-stats'][i], 4)))
+
+        if first_tick:
+            first_tick = False
+            ordering = ''
 
     return xticks, yticks
 
@@ -288,14 +295,21 @@ def get_ticks_heatline(analysis, proposed_method):
         ordering = 'average-'+analysis['used-statistics']
     else:
         ordering = analysis['order-stats']
+    
+    ordering = ''
+    first_tick = True
 
     for i in range(analysis['n-classifiers']):
 
         if analysis['ordered-classifier-names'][i] == proposed_method:
-            yticks.append(proposed_method + ' VS')
+            yticks.append(proposed_method)
         
-        xticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + '\n' + str(round(analysis['ordered-stats'][i], 4)))
+        else:
+            xticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + str(round(analysis['ordered-stats'][i], 4)))
         
+        if first_tick:
+            first_tick = False
+            ordering = ''
     return xticks, yticks
 
 def abs(x):

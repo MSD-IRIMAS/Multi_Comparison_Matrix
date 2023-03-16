@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib as mlp
 import json
 
 from .utils import *
@@ -85,7 +86,8 @@ def get_analysis(df_results,
             'used-statistics' : used_statistic,
             'order-WinTieLoss' : order_WinTieLoss,
             'include-pvalue' : include_pvalue,
-            'pvalue-test' : pvalue_test
+            'pvalue-test' : pvalue_test,
+            'pvalue-threshold' : pvalue_threshhold
         }
 
     decode_results_data_frame(df=df_results, analysis=analysis)
@@ -395,6 +397,19 @@ def get_heatmap(analysis=None,
             im.axes.text(j, i, df_annotations_np[i, j], **kw)
             kw.update(fontweight='normal')
 
+    if analysis['order-stats'] == 'average-statistic':
+        ordering = 'average-'+analysis['used-statistics']
+    else:
+        ordering = analysis['order-stats']
+
+    im.axes.text(-0.8,-0.6, ordering, fontsize=font_size)
+
+    if analysis['include-pvalue']:
+
+        plt.legend([mlp.lines.Line2D([],[],color='white')],
+                ['p-value < '+str(analysis['pvalue-threshold'])],
+                prop={'size' : 15, 'weight' : 'bold'}, loc='lower right')
+    
     plt.savefig(output_dir + 'heatmap.pdf')
     plt.cla()
     plt.clf()
@@ -460,12 +475,26 @@ def get_line_heatmap(proposed_methods,
     excluded methods exist
     
     """
+
+    if analysis is None:
+    
+        if load_analysis:
+            with open(output_dir + 'analysis.json') as json_file:
+                analysis = json.load(json_file)
     
     if colorbar_orientation == 'vertical':
         pixels_per_clf_hieght = 9
     
     if disjoint_methods:
         assert df_results is not None
+    
+    else:
+        for proposed_method in proposed_methods:
+            if proposed_method not in analysis['classifier-names']:
+                assert df_results is not None
+        
+        load_analysis = False
+        analysis = None
 
     if not isinstance(proposed_methods, list):
         proposed_methods = [proposed_methods]
@@ -591,17 +620,31 @@ def _get_line_heatmap(proposed_method,
                 analysis = json.load(json_file)
         
         else:
-            raise ValueError("If no analysis dictionary is prvided then the argument load_analysis should be true")
+            analysis = get_analysis(df_results=df_results, save_as_json=False,
+                                used_statistic=used_statistic,
+                                order_WinTieLoss=order_WinTieLoss,
+                                used_mean=used_mean,
+                                order_stats=order_stats,
+                                order_better=order_better,
+                                include_ProbaWinTieLoss=include_ProbaWinTieLoss,
+                                bayesian_rope=bayesian_rope,
+                                include_pvalue=include_pvalue,
+                                pvalue_correction=pvalue_correction,
+                                pvalue_test=pvalue_test,
+                                pvalue_threshhold=pvalue_threshhold,
+                                dataset_column=dataset_column)
     
     names_classifiers = []
     ordered_stats = []
 
     for i in range(analysis['n-classifiers']):
 
-        names_classifiers.append(analysis['ordered-classifier-names'][i])
-        ordered_stats.append(analysis['ordered-stats'][i])
+        if analysis['ordered-classifier-names'][i] != proposed_method:
 
-    pairwise_line = np.zeros(shape=(1, analysis['n-classifiers']))
+            names_classifiers.append(analysis['ordered-classifier-names'][i])
+            ordered_stats.append(analysis['ordered-stats'][i])
+
+    pairwise_line = np.zeros(shape=(1, analysis['n-classifiers']-1))
     df_annotations = pd.DataFrame(columns=['Classifier']+names_classifiers)
 
     dict_to_add = {'Classifier' : proposed_method}
@@ -610,14 +653,16 @@ def _get_line_heatmap(proposed_method,
 
         if names_classifiers[i] == proposed_method:
 
-            string_to_add = ''
-            string_to_add = string_to_add + analysis['used-mean'] + '\n'
-            string_to_add = string_to_add + 'Win/Tie/Loss ' + analysis['order-WinTieLoss'] + '\n'
-            if analysis['include-pvalue']:
-                string_to_add = string_to_add + analysis['pvalue-test'] + ' p-value'
+            continue
 
-            pairwise_line[0,i] = 0.0
-            dict_to_add[names_classifiers[i]] = string_to_add
+            # string_to_add = ''
+            # string_to_add = string_to_add + analysis['used-mean'] + '\n'
+            # string_to_add = string_to_add + 'Win/Tie/Loss ' + analysis['order-WinTieLoss'] + '\n'
+            # if analysis['include-pvalue']:
+            #     string_to_add = string_to_add + analysis['pvalue-test'] + ' p-value'
+
+            # pairwise_line[0,i] = 0.0
+            # dict_to_add[names_classifiers[i]] = string_to_add
 
         else:
 
@@ -627,9 +672,9 @@ def _get_line_heatmap(proposed_method,
                     
             if colormap is not None:
                 if colorbar_value is None:
-                    pairwise_line[0,i] = analysis[proposed_method+'-vs-'+analysis['ordered-classifier-names'][i]]['mean']
+                    pairwise_line[0,i] = analysis[proposed_method+'-vs-'+names_classifiers[i]]['mean']
                 else:
-                    pairwise_line[0,i] = analysis[proposed_method+'-vs-'+analysis['ordered-classifier-names'][i]][colorbar_value]
+                    pairwise_line[0,i] = analysis[proposed_method+'-vs-'+names_classifiers[i]][colorbar_value]
             else:
                 pairwise_line[0,i] = 0
 
@@ -704,8 +749,8 @@ def _get_line_heatmap(proposed_method,
         _vmax = 2
     else:
         _colormap = colormap
-        _vmin = min_value + 0.2*min_value
-        _vmax = max_value + 0.2*max_value
+        _vmin = min_value + 0.5*min_value
+        _vmax = max_value + 0.5*max_value
     
     if colorbar_value is None:
         _colorbar_value = 'mean-difference'
@@ -745,6 +790,23 @@ def _get_line_heatmap(proposed_method,
 
         im.axes.text(i, 0, df_annotations_np[0, i], **kw)
         kw.update(fontweight='normal')
+    
+    if analysis['order-stats'] == 'average-statistic':
+        ordering = 'average-'+analysis['used-statistics']
+    else:
+        ordering = analysis['order-stats']
+
+    im.axes.text(-0.8,-0.6, ordering, fontsize=font_size)
+
+    string_to_add = ''
+    string_to_add = string_to_add + analysis['used-mean'] + '\n'
+    string_to_add = string_to_add + 'Win/Tie/Loss ' + analysis['order-WinTieLoss'] + '\n'
+    if analysis['include-pvalue']:
+        string_to_add = string_to_add + analysis['pvalue-test'].capitalize() + ' p-value < ' + str(analysis['pvalue-threshold'])
+    
+    plt.legend([mlp.lines.Line2D([],[],color='white')],
+               [string_to_add],
+               prop={'size' : 15, 'weight' : 'bold'}, loc="lower left", borderaxespad=-5)
 
     plt.savefig(output_dir + proposed_method+'_heatline.pdf')
 
