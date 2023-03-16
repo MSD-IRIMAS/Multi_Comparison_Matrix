@@ -402,7 +402,7 @@ def get_heatmap(analysis=None,
     else:
         ordering = analysis['order-stats']
 
-    im.axes.text(-0.8,-0.6, ordering, fontsize=font_size)
+    im.axes.text(-0.6,-0.6, ordering, fontsize=font_size)
 
     if analysis['include-pvalue']:
 
@@ -426,7 +426,7 @@ def get_line_heatmap(proposed_methods,
                      fig_size='auto',
                      font_size='auto',
                      pixels_per_clf_hieght=7,
-                     pixels_per_clf_width=2.5,
+                     pixels_per_clf_width=1.5,
                      colorbar_orientation='horizontal',
                      used_statistic='Accuracy',
                      order_WinTieLoss='higher',
@@ -651,64 +651,47 @@ def _get_line_heatmap(proposed_method,
 
     for i in range(len(names_classifiers)):
 
-        if names_classifiers[i] == proposed_method:
-
-            continue
-
-            # string_to_add = ''
-            # string_to_add = string_to_add + analysis['used-mean'] + '\n'
-            # string_to_add = string_to_add + 'Win/Tie/Loss ' + analysis['order-WinTieLoss'] + '\n'
-            # if analysis['include-pvalue']:
-            #     string_to_add = string_to_add + analysis['pvalue-test'] + ' p-value'
-
-            # pairwise_line[0,i] = 0.0
-            # dict_to_add[names_classifiers[i]] = string_to_add
-
-        else:
-
-            n_info_per_line = 0
-
-            # pairwise_line[0,i] = analysis[proposed_method+'-vs-'+names_classifiers[i]]['mean']
-                    
-            if colormap is not None:
-                if colorbar_value is None:
-                    pairwise_line[0,i] = analysis[proposed_method+'-vs-'+names_classifiers[i]]['mean']
-                else:
-                    pairwise_line[0,i] = analysis[proposed_method+'-vs-'+names_classifiers[i]][colorbar_value]
+        n_info_per_line = 0
+                
+        if colormap is not None:
+            if colorbar_value is None:
+                pairwise_line[0,i] = analysis[proposed_method+'-vs-'+names_classifiers[i]]['mean']
             else:
-                pairwise_line[0,i] = 0
+                pairwise_line[0,i] = analysis[proposed_method+'-vs-'+names_classifiers[i]][colorbar_value]
+        else:
+            pairwise_line[0,i] = 0
 
-            pairwise_content = analysis[proposed_method+'-vs-'+names_classifiers[i]]
-            pairwise_keys = list(pairwise_content.keys())
+        pairwise_content = analysis[proposed_method+'-vs-'+names_classifiers[i]]
+        pairwise_keys = list(pairwise_content.keys())
 
-            string_to_add = ''
+        string_to_add = ''
 
-            string_to_add = string_to_add + str(round(pairwise_content['mean'],4))
+        string_to_add = string_to_add + str(round(pairwise_content['mean'],4))
+        string_to_add = string_to_add + '\n'
+        n_info_per_line += 1
+
+        if 'win' in pairwise_keys:
+
+            string_to_add = string_to_add + str(pairwise_content['win']) + ' / '
+            string_to_add = string_to_add + str(pairwise_content['tie']) + ' / '
+            string_to_add = string_to_add + str(pairwise_content['loss'])
             string_to_add = string_to_add + '\n'
             n_info_per_line += 1
+        
+        if 'p_x_wins' in pairwise_keys:
 
-            if 'win' in pairwise_keys:
+            string_to_add = string_to_add + str(round(pairwise_content['p-x-wins'],4)) + ' / '
+            string_to_add = string_to_add + str(round(pairwise_content['p-rope'],4)) + ' / '
+            string_to_add = string_to_add + str(round(pairwise_content['p-y-wins'],4))
+            string_to_add = string_to_add + '\n'
+            n_info_per_line += 1
+        
+        if 'pvalue' in pairwise_keys:
 
-                string_to_add = string_to_add + str(pairwise_content['win']) + ' / '
-                string_to_add = string_to_add + str(pairwise_content['tie']) + ' / '
-                string_to_add = string_to_add + str(pairwise_content['loss'])
-                string_to_add = string_to_add + '\n'
-                n_info_per_line += 1
-            
-            if 'p_x_wins' in pairwise_keys:
+            string_to_add = string_to_add + str(round(pairwise_content['pvalue'],4))
+            n_info_per_line += 1
 
-                string_to_add = string_to_add + str(round(pairwise_content['p-x-wins'],4)) + ' / '
-                string_to_add = string_to_add + str(round(pairwise_content['p-rope'],4)) + ' / '
-                string_to_add = string_to_add + str(round(pairwise_content['p-y-wins'],4))
-                string_to_add = string_to_add + '\n'
-                n_info_per_line += 1
-            
-            if 'pvalue' in pairwise_keys:
-
-                string_to_add = string_to_add + str(round(pairwise_content['pvalue'],4))
-                n_info_per_line += 1
-
-            dict_to_add[names_classifiers[i]] = string_to_add
+        dict_to_add[names_classifiers[i]] = string_to_add
 
     df_annotations = df_annotations.append(dict_to_add, ignore_index=True)
 
@@ -723,7 +706,7 @@ def _get_line_heatmap(proposed_method,
 
     if font_size == 'auto':
 
-        font_size = max(len(names_classifiers) * 3, 10)
+        font_size = max(len(names_classifiers) * 3, 7)
 
         if colorbar_orientation == 'horizontal':
             font_size_colorbar_label = font_size * 1.5
@@ -749,8 +732,8 @@ def _get_line_heatmap(proposed_method,
         _vmax = 2
     else:
         _colormap = colormap
-        _vmin = min_value + 0.5*min_value
-        _vmax = max_value + 0.5*max_value
+        _vmin = min_value + 0.8*min_value
+        _vmax = max_value + 0.8*max_value
     
     if colorbar_value is None:
         _colorbar_value = 'mean-difference'
@@ -806,7 +789,7 @@ def _get_line_heatmap(proposed_method,
     
     plt.legend([mlp.lines.Line2D([],[],color='white')],
                [string_to_add],
-               prop={'size' : 15, 'weight' : 'bold'}, loc="lower left", borderaxespad=-5)
+               prop={'size' : font_size, 'weight' : 'bold'}, loc="lower left", borderaxespad=-5)
 
     plt.savefig(output_dir + proposed_method+'_heatline.pdf')
 
