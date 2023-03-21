@@ -25,7 +25,7 @@ class NpEncoder(json.JSONEncoder):
 
 def get_analysis(df_results,
                  output_dir='./',
-                 used_statistic='Accuracy',
+                 used_statistic='Score',
                  save_as_json=True,
                  plot_1v1_comparisons=False,
                  order_WinTieLoss='higher',
@@ -50,7 +50,7 @@ def get_analysis(df_results,
 
     df_results : pandas DataFrame, the csv file containing results
     output_dir : str, default = './', the output directory for the results
-    used_statistic : str, default = 'Accuracy', one can imagine using error, time, memory etc. instead
+    used_statistic : str, default = 'Score', one can imagine using error, time, memory etc. instead
     save_as_json : bool, default = True, whether or not to save the python analysis dict
                    into a json file format
     plot_1v1_comparisons : bool, default = True, whether or not to plot the 1v1 scatter results
@@ -199,7 +199,10 @@ def get_heatmap(analysis=None,
                 pixels_per_clf_width=3.5,
                 show_symetry=True,
                 colorbar_orientation='vertical',
-                colorbar_value=None):
+                colorbar_value=None,
+                win_label='r>c',
+                tie_label='r=c',
+                loss_label='r<c'):
     
     """
     
@@ -245,8 +248,8 @@ def get_heatmap(analysis=None,
     start_index = 0
 
     string_to_add = ''
-    string_to_add = string_to_add + analysis['used-mean'] + '\n'
-    string_to_add = string_to_add + 'Win/Tie/Loss ' + analysis['order-WinTieLoss'] + '\n'
+    string_to_add = string_to_add + capitalize_label(analysis['used-mean']) + '\n'
+    string_to_add = string_to_add + win_label+'/'+tie_label+'/'+loss_label+' ' + '\n'
     if analysis['include-pvalue']:
         string_to_add = string_to_add + analysis['pvalue-test'].capitalize() + ' p-value'
 
@@ -320,7 +323,10 @@ def get_heatmap(analysis=None,
         if show_symetry:
             pairwise_matrix[i,i] = 0.0
             if i > 0:
-                dict_to_add[analysis['ordered-classifier-names'][i]] = '-'
+                if i == 1 and win_label == 'r>c':
+                    dict_to_add[analysis['ordered-classifier-names'][i]] = 'r: row\nc: column'
+                else:
+                    dict_to_add[analysis['ordered-classifier-names'][i]] = '-'
 
         df_annotations = df_annotations.append(dict_to_add, ignore_index=True)
     
@@ -352,7 +358,10 @@ def get_heatmap(analysis=None,
     plt.rcParams["figure.autolayout"] = True
     fig, ax = plt.subplots(1, 1, figsize=(figsize[0], figsize[1]))
 
-    min_value, max_value = get_limits(pairwise_matrix=pairwise_matrix)
+    _can_be_negative = False
+    if colorbar_value is None or colorbar_value == 'mean-difference':
+        _can_be_negative = True
+    min_value, max_value = get_limits(pairwise_matrix=pairwise_matrix, can_be_negative=_can_be_negative)
 
     if colormap is None:
         _colormap = 'coolwarm'
@@ -363,6 +372,10 @@ def get_heatmap(analysis=None,
         _vmin = min_value + 0.2*min_value
         _vmax = max_value + 0.2*max_value
 
+    if colorbar_value is None:
+        _colorbar_value = capitalize_label('mean-difference')
+    else:
+        _colorbar_value = capitalize_label(colorbar_value)
 
     im = ax.imshow(pairwise_matrix,
                    cmap=_colormap,
@@ -373,7 +386,7 @@ def get_heatmap(analysis=None,
     if colormap is not None:
         cbar = ax.figure.colorbar(im, ax=ax, orientation=colorbar_orientation)
         cbar.ax.tick_params(labelsize=font_size)
-        cbar.set_label(label=analysis['used-mean'], size=font_size_colorbar_label)
+        cbar.set_label(label=capitalize_label(_colorbar_value), size=font_size_colorbar_label)
 
     xticks, yticks = get_ticks(analysis)
 
@@ -398,7 +411,7 @@ def get_heatmap(analysis=None,
             kw.update(fontweight='normal')
 
     if analysis['order-stats'] == 'average-statistic':
-        ordering = 'average-'+analysis['used-statistics']
+        ordering = 'Average-'+capitalize_label(analysis['used-statistics'])
     else:
         ordering = analysis['order-stats']
 
@@ -434,7 +447,7 @@ def get_line_heatmap(proposed_methods,
                      pixels_per_clf_hieght=7,
                      pixels_per_clf_width=1.5,
                      colorbar_orientation='horizontal',
-                     used_statistic='Accuracy',
+                     used_statistic='Score',
                      order_WinTieLoss='higher',
                      include_ProbaWinTieLoss=False,
                      bayesian_rope=0.01,
@@ -445,7 +458,10 @@ def get_line_heatmap(proposed_methods,
                      used_mean='mean-difference',
                      order_stats='average-statistic',
                      order_better='decreasing',
-                     dataset_column='dataset_name',):
+                     dataset_column='dataset_name',
+                     win_label='row>col',
+                     tie_label='row=col',
+                     loss_label='row<col'):
 
     """
     
@@ -539,7 +555,10 @@ def get_line_heatmap(proposed_methods,
                           pvalue_correction=pvalue_correction,
                           pvalue_test=pvalue_test,
                           pvalue_threshhold=pvalue_threshhold,
-                          dataset_column=dataset_column)
+                          dataset_column=dataset_column,
+                          win_label=win_label,
+                          tie_label=tie_label,
+                          loss_label=loss_label)
 
 def _get_line_heatmap(proposed_method,
                       excluded_methods=None,
@@ -554,7 +573,7 @@ def _get_line_heatmap(proposed_method,
                       pixels_per_clf_hieght=7,
                       pixels_per_clf_width=2.5,
                       colorbar_orientation='horizontal',
-                      used_statistic='Accuracy',
+                      used_statistic='Score',
                       order_WinTieLoss='higher',
                       include_ProbaWinTieLoss=False,
                       bayesian_rope=0.01,
@@ -565,7 +584,10 @@ def _get_line_heatmap(proposed_method,
                       used_mean='mean-difference',
                       order_stats='average-statistic',
                       order_better='decreasing',
-                      dataset_column='dataset_name',):
+                      dataset_column='dataset_name',
+                      win_label='row>column',
+                      tie_label='row=column',
+                      loss_label='row<column'):
 
     """
     
@@ -747,9 +769,9 @@ def _get_line_heatmap(proposed_method,
         _vmax = max_value + 0.8*max_value
     
     if colorbar_value is None:
-        _colorbar_value = 'mean-difference'
+        _colorbar_value = capitalize_label('mean-difference')
     else:
-        _colorbar_value = colorbar_value
+        _colorbar_value = capitalize_label(colorbar_value)
 
     im = ax.imshow(pairwise_line,
                    cmap=_colormap,
@@ -786,15 +808,15 @@ def _get_line_heatmap(proposed_method,
         kw.update(fontweight='normal')
     
     if analysis['order-stats'] == 'average-statistic':
-        ordering = 'average-'+analysis['used-statistics']
+        ordering = 'Average-'+capitalize_label(analysis['used-statistics'])
     else:
         ordering = analysis['order-stats']
 
     im.axes.text(-0.7,-0.7, ordering, fontsize=font_size, **{"horizontalalignment":"center", "verticalalignment":"center"})
 
     string_to_add = ''
-    string_to_add = string_to_add + analysis['used-mean'] + '\n'
-    string_to_add = string_to_add + 'Win/Tie/Loss ' + analysis['order-WinTieLoss'] + '\n'
+    string_to_add = string_to_add + capitalize_label(analysis['used-mean']) + '\n'
+    string_to_add = string_to_add + win_label+'/'+tie_label+'/'+loss_label+' ' + '\n'
     if analysis['include-pvalue']:
         string_to_add = string_to_add + analysis['pvalue-test'].capitalize() + ' p-value < ' + str(analysis['pvalue-threshold'])
     

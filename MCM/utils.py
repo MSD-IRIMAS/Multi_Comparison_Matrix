@@ -484,3 +484,11 @@ def plot_1v1(x,
     if not os.path.exists(output_directory+'1v1_plots/'):
         os.mkdir(output_directory+'1v1_plots/')
     plt.savefig(output_directory + '1v1_plots/'+name_x+'_vs_'+name_y+'.pdf')
+
+def capitalize_label(s):
+
+    if len(s.split('-')) == 1:
+        return s.capitalize()
+    
+    else:
+        return '-'.join(ss.capitalize() for ss in s.split('-'))
