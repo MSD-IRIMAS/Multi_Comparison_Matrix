@@ -402,13 +402,19 @@ def get_heatmap(analysis=None,
     else:
         ordering = analysis['order-stats']
 
-    im.axes.text(-0.6,-0.6, ordering, fontsize=font_size)
+    im.axes.text(-0.7,-0.7, ordering, fontsize=font_size, **{"horizontalalignment":"center", "verticalalignment":"center"})
 
-    if analysis['include-pvalue']:
+    # if analysis['include-pvalue']:
 
-        plt.legend([mlp.lines.Line2D([],[],color='white')],
-                ['p-value < '+str(analysis['pvalue-threshold'])],
-                prop={'size' : 15, 'weight' : 'bold'}, loc='lower right')
+    #     plt.legend([mlp.lines.Line2D([],[],color='white')],
+    #             ['p-value < '+str(analysis['pvalue-threshold'])],
+    #             prop={'size' : 15, 'weight' : 'bold'}, loc='lower right')
+
+    string_to_add = "If in bold, then\n"+"p-value < "+str(analysis['pvalue-threshold'])
+    im.axes.text(analysis['n-classifiers']-1,analysis['n-classifiers']-1, string_to_add, fontsize=font_size,
+                 **{"horizontalalignment":"center",
+                    "verticalalignment":"center",
+                    "weight" : "bold"})
     
     plt.savefig(output_dir + 'heatmap.pdf')
     plt.cla()
@@ -688,7 +694,12 @@ def _get_line_heatmap(proposed_method,
         
         if 'pvalue' in pairwise_keys:
 
-            string_to_add = string_to_add + str(round(pairwise_content['pvalue'],4))
+            string_to_add = string_to_add 
+            _p_value = round(pairwise_content['pvalue'],4)
+            if _p_value == 0:
+                string_to_add = string_to_add + "< " + str(1e-4)
+            else:
+                string_to_add = string_to_add + str(_p_value)
             n_info_per_line += 1
 
         dict_to_add[names_classifiers[i]] = string_to_add
@@ -706,7 +717,7 @@ def _get_line_heatmap(proposed_method,
 
     if font_size == 'auto':
 
-        font_size = max(len(names_classifiers) * 3, 7)
+        font_size = max(len(names_classifiers) * 2.5, 7)
 
         if colorbar_orientation == 'horizontal':
             font_size_colorbar_label = font_size * 1.5
@@ -779,7 +790,7 @@ def _get_line_heatmap(proposed_method,
     else:
         ordering = analysis['order-stats']
 
-    im.axes.text(-0.8,-0.6, ordering, fontsize=font_size)
+    im.axes.text(-0.7,-0.7, ordering, fontsize=font_size, **{"horizontalalignment":"center", "verticalalignment":"center"})
 
     string_to_add = ''
     string_to_add = string_to_add + analysis['used-mean'] + '\n'
@@ -787,9 +798,18 @@ def _get_line_heatmap(proposed_method,
     if analysis['include-pvalue']:
         string_to_add = string_to_add + analysis['pvalue-test'].capitalize() + ' p-value < ' + str(analysis['pvalue-threshold'])
     
-    plt.legend([mlp.lines.Line2D([],[],color='white')],
-               [string_to_add],
-               prop={'size' : font_size, 'weight' : 'bold'}, loc="lower left", borderaxespad=-5)
+    # plt.legend([mlp.lines.Line2D([],[],color='white')],
+    #            [string_to_add],
+    #            prop={'size' : font_size, 'weight' : 'bold'}, loc="lower left", borderaxespad=-5)
+
+    im.axes.text(0,0.9, string_to_add, fontsize=font_size, **{"horizontalalignment":"center", "verticalalignment":"center"})
+
+    string_to_add = "If in bold, then\n"+"p-value < "+str(analysis['pvalue-threshold'])
+    im.axes.text(len(names_classifiers)-1,0.9, string_to_add, fontsize=font_size,
+                 **{"horizontalalignment":"center",
+                    "verticalalignment":"center",
+                    "weight" : "bold"})
+
 
     plt.savefig(output_dir + proposed_method+'_heatline.pdf')
 
