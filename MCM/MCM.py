@@ -38,7 +38,7 @@ def get_analysis(df_results,
                  used_mean='mean-difference',
                  order_stats='average-statistic',
                  order_better='decreasing',
-                 dataset_column='dataset_name',):
+                 dataset_column=None,):
     
     """
     
@@ -444,7 +444,7 @@ def get_line_heatmap(proposed_methods,
                      colorbar_value=None,
                      fig_size='auto',
                      font_size='auto',
-                     pixels_per_clf_hieght=7,
+                     pixels_per_clf_hieght=8,
                      pixels_per_clf_width=1.5,
                      colorbar_orientation='horizontal',
                      used_statistic='Score',
@@ -458,7 +458,7 @@ def get_line_heatmap(proposed_methods,
                      used_mean='mean-difference',
                      order_stats='average-statistic',
                      order_better='decreasing',
-                     dataset_column='dataset_name',
+                     dataset_column=None,
                      win_label='row>col',
                      tie_label='row=col',
                      loss_label='row<col'):
@@ -515,8 +515,8 @@ def get_line_heatmap(proposed_methods,
             if proposed_method not in analysis['classifier-names']:
                 assert df_results is not None
         
-        load_analysis = False
-        analysis = None
+                load_analysis = False
+                analysis = None
 
     if not isinstance(proposed_methods, list):
         proposed_methods = [proposed_methods]
@@ -584,7 +584,7 @@ def _get_line_heatmap(proposed_method,
                       used_mean='mean-difference',
                       order_stats='average-statistic',
                       order_better='decreasing',
-                      dataset_column='dataset_name',
+                      dataset_column=None,
                       win_label='row>column',
                       tie_label='row=column',
                       loss_label='row<column'):
@@ -765,8 +765,8 @@ def _get_line_heatmap(proposed_method,
         _vmax = 2
     else:
         _colormap = colormap
-        _vmin = min_value + 0.8*min_value
-        _vmax = max_value + 0.8*max_value
+        _vmin = min_value + 0.9*min_value
+        _vmax = max_value + 0.9*max_value
     
     if colorbar_value is None:
         _colorbar_value = capitalize_label('mean-difference')

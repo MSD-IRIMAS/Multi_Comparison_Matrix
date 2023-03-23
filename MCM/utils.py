@@ -30,18 +30,22 @@ def decode_results_data_frame(df, analysis):
     df_columns = list(df.columns) # extract columns from data frame
 
     # check if dataset column name is correct
-    if analysis['dataset-column'] not in df_columns:
-        raise KeyError("The column "+analysis['dataset-column']+" is missing.")
+
+    if analysis['dataset-column'] is not None:
+        if analysis['dataset-column'] not in df_columns:
+            raise KeyError("The column "+analysis['dataset-column']+" is missing.")
 
     # get number of examples (datasets)
-    n_datasets = len(np.unique(np.asarray(df[analysis['dataset-column']])))
+    # n_datasets = len(np.unique(np.asarray(df[analysis['dataset-column']])))
+    n_datasets = len(df.index)
 
     analysis['n-datasets'] = n_datasets # add number of examples to dictionary
 
-    analysis['dataset-names'] = list(df[analysis['dataset-column']]) # add example names to dict
-    
-    df_columns.remove(analysis['dataset-column']) # drop the dataset column name from columns list
-    # and keep classifier names
+    if analysis['dataset-column'] is not None:
+        
+        analysis['dataset-names'] = list(df[analysis['dataset-column']]) # add example names to dict
+        df_columns.remove(analysis['dataset-column']) # drop the dataset column name from columns list
+        # and keep classifier names
 
     classifier_names = df_columns.copy()
     n_classifiers = len(classifier_names)
@@ -164,7 +168,11 @@ def re_order_classifiers(df_results, analysis):
     
     elif analysis['order-stats'] == 'average-rank':
 
-        np_results = np.asarray(df_results.drop([analysis['dataset-column']],axis=1))
+        if analysis['dataset-column'] is not None:
+            np_results = np.asarray(df_results.drop([analysis['dataset-column']],axis=1))
+        else:
+            np_results = np.asarray(df_results)
+            
         df = pd.DataFrame(columns=['classifier-name','values'])
         
         for i, classifier_name in enumerate(analysis['classifier-names']):
