@@ -87,7 +87,8 @@ def get_analysis(df_results,
             'order-WinTieLoss' : order_WinTieLoss,
             'include-pvalue' : include_pvalue,
             'pvalue-test' : pvalue_test,
-            'pvalue-threshold' : pvalue_threshhold
+            'pvalue-threshold' : pvalue_threshhold,
+            'pvalue-correction' : pvalue_correction
         }
 
     decode_results_data_frame(df=df_results, analysis=analysis)
@@ -177,8 +178,8 @@ def get_analysis(df_results,
         for i in range(analysis['n-classifiers']):
             for j in range(i+1,analysis['n-classifiers']):
                 
-                analysis[analysis['classifier-names'][j]+'-vs-'+analysis['classifier_names'][i]]['is-significant'] = analysis[analysis['classifier-names'][i]+'-vs-'+analysis['classifier-names'][j]]['is-significant']
-                analysis[analysis['classifier-names'][j]+'-vs-'+analysis['classifier_names'][i]]['pvalue'] = analysis[analysis['classifier-names'][i]+'-vs-'+analysis['classifier-names'][j]]['pvalue']
+                analysis[analysis['classifier-names'][j]+'-vs-'+analysis['classifier-names'][i]]['is-significant'] = analysis[analysis['classifier-names'][i]+'-vs-'+analysis['classifier-names'][j]]['is-significant']
+                analysis[analysis['classifier-names'][j]+'-vs-'+analysis['classifier-names'][i]]['pvalue'] = analysis[analysis['classifier-names'][i]+'-vs-'+analysis['classifier-names'][j]]['pvalue']
 
     re_order_classifiers(df_results=df_results,
                         analysis=analysis)
@@ -423,7 +424,10 @@ def get_heatmap(analysis=None,
     #             ['p-value < '+str(analysis['pvalue-threshold'])],
     #             prop={'size' : 15, 'weight' : 'bold'}, loc='lower right')
 
-    string_to_add = "If in bold, then\n"+"p-value < "+str(analysis['pvalue-threshold'])
+    if analysis['include-pvalue']:
+        string_to_add = "If in bold, then\n"+"p-value < "+str(analysis['pvalue-threshold'])
+        if analysis['pvalue-correction'] is not None:
+            string_to_add = string_to_add + '\n' + analysis['pvalue-correction'].capitalize() + ' Correction'
     im.axes.text(analysis['n-classifiers']-1,analysis['n-classifiers']-1, string_to_add, fontsize=font_size,
                  **{"horizontalalignment":"center",
                     "verticalalignment":"center",
@@ -818,7 +822,7 @@ def _get_line_heatmap(proposed_method,
     string_to_add = string_to_add + capitalize_label(analysis['used-mean']) + '\n'
     string_to_add = string_to_add + win_label+'/'+tie_label+'/'+loss_label+' ' + '\n'
     if analysis['include-pvalue']:
-        string_to_add = string_to_add + analysis['pvalue-test'].capitalize() + ' p-value < ' + str(analysis['pvalue-threshold'])
+        string_to_add = string_to_add + analysis['pvalue-test'].capitalize() + ' p-value'
     
     # plt.legend([mlp.lines.Line2D([],[],color='white')],
     #            [string_to_add],
@@ -826,7 +830,10 @@ def _get_line_heatmap(proposed_method,
 
     im.axes.text(0,0.9, string_to_add, fontsize=font_size, **{"horizontalalignment":"center", "verticalalignment":"center"})
 
-    string_to_add = "If in bold, then\n"+"p-value < "+str(analysis['pvalue-threshold'])
+    if analysis['include-pvalue']:
+        string_to_add = "If in bold, then\n"+"p-value < "+str(analysis['pvalue-threshold'])
+        if analysis['pvalue-correction'] is not None:
+            string_to_add = string_to_add + '\n' + analysis['pvalue-correction'].capitalize() + ' Correction'
     im.axes.text(len(names_classifiers)-1,0.9, string_to_add, fontsize=font_size,
                  **{"horizontalalignment":"center",
                     "verticalalignment":"center",
