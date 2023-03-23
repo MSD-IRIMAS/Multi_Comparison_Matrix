@@ -282,7 +282,7 @@ def get_heatmap(analysis=None,
 
                 string_to_add = ''
 
-                string_to_add = string_to_add + str(round(pairwise_content['mean'],4))
+                string_to_add = string_to_add + str(format(round(pairwise_content['mean'],4), '.4f'))
                 string_to_add = string_to_add + '\n'
                 n_info_per_line += 1
 
@@ -296,16 +296,16 @@ def get_heatmap(analysis=None,
 
                 if 'p_x_wins' in pairwise_keys:
 
-                    string_to_add = string_to_add + str(round(pairwise_content['p-x-wins'],4)) + ' / '
-                    string_to_add = string_to_add + str(round(pairwise_content['p-rope'],4)) + ' / '
-                    string_to_add = string_to_add + str(round(pairwise_content['p-y-wins'],4))
+                    string_to_add = string_to_add + str(format(round(pairwise_content['p-x-wins'],4), '.4f')) + ' / '
+                    string_to_add = string_to_add + str(format(round(pairwise_content['p-rope'],4), '.4f')) + ' / '
+                    string_to_add = string_to_add + str(format(round(pairwise_content['p-y-wins'],4), '.4f'))
                     string_to_add = string_to_add + '\n'
                     n_info_per_line += 1
                 
                 if 'pvalue' in pairwise_keys:
 
                     string_to_add = string_to_add 
-                    _p_value = round(pairwise_content['pvalue'],4)
+                    _p_value = format(round(pairwise_content['pvalue'],4), '.4f')
                     if _p_value == 0:
                         string_to_add = string_to_add + "< " + str(1e-4)
                     else:
@@ -694,7 +694,7 @@ def _get_line_heatmap(proposed_method,
 
         string_to_add = ''
 
-        string_to_add = string_to_add + str(round(pairwise_content['mean'],4))
+        string_to_add = string_to_add + str(format(round(pairwise_content['mean'],4), '.4f'))
         string_to_add = string_to_add + '\n'
         n_info_per_line += 1
 
@@ -708,16 +708,16 @@ def _get_line_heatmap(proposed_method,
         
         if 'p_x_wins' in pairwise_keys:
 
-            string_to_add = string_to_add + str(round(pairwise_content['p-x-wins'],4)) + ' / '
-            string_to_add = string_to_add + str(round(pairwise_content['p-rope'],4)) + ' / '
-            string_to_add = string_to_add + str(round(pairwise_content['p-y-wins'],4))
+            string_to_add = string_to_add + str(format(round(pairwise_content['p-x-wins'],4), '.4f')) + ' / '
+            string_to_add = string_to_add + str(format(round(pairwise_content['p-rope'],4), '.4f')) + ' / '
+            string_to_add = string_to_add + str(format(round(pairwise_content['p-y-wins'],4), '.4f'))
             string_to_add = string_to_add + '\n'
             n_info_per_line += 1
         
         if 'pvalue' in pairwise_keys:
 
             string_to_add = string_to_add 
-            _p_value = round(pairwise_content['pvalue'],4)
+            _p_value = format(round(pairwise_content['pvalue'],4), '.4f')
             if _p_value == 0:
                 string_to_add = string_to_add + "< " + str(1e-4)
             else:

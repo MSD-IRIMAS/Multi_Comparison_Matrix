@@ -172,7 +172,7 @@ def re_order_classifiers(df_results, analysis):
             np_results = np.asarray(df_results.drop([analysis['dataset-column']],axis=1))
         else:
             np_results = np.asarray(df_results)
-            
+
         df = pd.DataFrame(columns=['classifier-name','values'])
         
         for i, classifier_name in enumerate(analysis['classifier-names']):
@@ -268,7 +268,7 @@ def get_ticks(analysis):
 
     for i in range(analysis['n-classifiers']):
         yticks.append(analysis['ordered-classifier-names'][i])
-        xticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + str(round(analysis['ordered-stats'][i], 4)))
+        xticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + str(format(round(analysis['ordered-stats'][i], 4), '.4f')))
 
         if first_tick:
             first_tick = False
@@ -310,10 +310,10 @@ def get_ticks_heatline(analysis, proposed_method):
     for i in range(analysis['n-classifiers']):
 
         if analysis['ordered-classifier-names'][i] == proposed_method:
-            yticks.append(proposed_method)
+            yticks.append(proposed_method+'\n'+str(format(round(analysis['ordered-stats'][i], 4), '.4f')))
         
         else:
-            xticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + str(round(analysis['ordered-stats'][i], 4)))
+            xticks.append(analysis['ordered-classifier-names'][i] + '\n' + ordering + str(format(round(analysis['ordered-stats'][i], 4), '.4f')))
         
         if first_tick:
             first_tick = False
