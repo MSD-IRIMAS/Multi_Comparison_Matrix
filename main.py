@@ -17,7 +17,10 @@ if __name__ == "__main__":
     
     MCM.get_heatmap(output_dir=output_dir,
                          colormap='coolwarm',
-                         show_symetry=True)
+                         show_symetry=True,
+                         win_label='row>col',
+                         tie_label='row=col',
+                         loss_label='row<col')
 
     MCM.get_line_heatmap(proposed_methods=['clf1','clf2'],
                          output_dir=output_dir)

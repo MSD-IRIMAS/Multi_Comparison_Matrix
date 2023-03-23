@@ -250,7 +250,7 @@ def get_heatmap(analysis=None,
 
     string_to_add = ''
     string_to_add = string_to_add + capitalize_label(analysis['used-mean']) + '\n'
-    string_to_add = string_to_add + win_label+'/'+tie_label+'/'+loss_label+' ' + '\n'
+    string_to_add = string_to_add + win_label+' / '+tie_label+' / '+loss_label+' ' + '\n'
     if analysis['include-pvalue']:
         string_to_add = string_to_add + analysis['pvalue-test'].capitalize() + ' p-value'
 
@@ -820,7 +820,7 @@ def _get_line_heatmap(proposed_method,
 
     string_to_add = ''
     string_to_add = string_to_add + capitalize_label(analysis['used-mean']) + '\n'
-    string_to_add = string_to_add + win_label+'/'+tie_label+'/'+loss_label+' ' + '\n'
+    string_to_add = string_to_add + win_label+' / '+tie_label+' / '+loss_label+' ' + '\n'
     if analysis['include-pvalue']:
         string_to_add = string_to_add + analysis['pvalue-test'].capitalize() + ' p-value'
     
