@@ -6,10 +6,7 @@ This work is done by ```list_of_authors```.
 
 ## Summary
 
-This repo is a long term used benchmark method that generates either:
-
-1. A HeatMap for a full 1v1 and multi comparison between classifiers evaluated on multiple dataset.
-2. A HeatLine for a 1v1 and multi comparison between a proposed method VS other approaches.
+This repo is a long term used benchmark method that generates a Multi-Comparison Matrix where the user ca choose whether to include a full pairwise multi-comparate comparison or to choose which ones to be included or excluded in the rows and columns of the matrix.
 
 ## Input Format
 
@@ -24,34 +21,28 @@ In the ```main.py``` file, set the:
 1. ```path_res``` variable to the path where to find the csv file
 2. ```output_dir``` variable to the path where the resulted comparison will be saved
 
-### Extract Comparisons
+## Plot the MCM
 
-To extract the comparisons in a json format, the function ```get_analysis``` should be used as in [this line](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/b911733153dbc3d578e649c062385700e9a2146e/main.py#L8). Set the input parameters as ```save_json=True``` to save the ```analysis``` dictionary in json format into ```output_dir```. Information about the input parameters of the ```get_analysis``` function are available [here in the docstring](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/b911733153dbc3d578e649c062385700e9a2146e/ALTAMCBE/ALTAMCBE.py#L25). The resulted analysis are stored in the json file found [here](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/analysis.json).
-
-### Plot the HeatMap
-
-To plot the full HeatMap, use the function ```get_heatmap``` as in [this line](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/b911733153dbc3d578e649c062385700e9a2146e/main.py#L13). Information about the input parameters of the ```get_heatmap``` function are available [here in the docstring](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/b911733153dbc3d578e649c062385700e9a2146e/ALTAMCBE/ALTAMCBE.py#L190).
-
-### Plot the HeatLine
-
-To plot the full HeatMap, use the function ```get_line_heatmap``` as in [this line](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/b911733153dbc3d578e649c062385700e9a2146e/main.py#L17), set the ```proposed_method``` string variable to the name of the classifier in question. Information about the input parameters of the ```get_heatmap``` function are available [here in the docstring](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/b911733153dbc3d578e649c062385700e9a2146e/ALTAMCBE/ALTAMCBE.py#L358).
+In order for the user to plot the MCM, first thing is to load the ```.csv``` file into a ```pandas``` dataframe and feed it to the ```compare``` function. The user should specify the ```fig_savename``` parameter in order to save the output figure in ```pdf``` and ```png``` formats.
 
 ## Examples
 
-Generating the HeatMap on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) produces the following.
+Generating the MCM on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) produces the following.
 
 <p align="center" width="100%">
 <img src="heatmap.png" alt="heatmap-example"/>
 </p>
 
-Generating the HeatLine on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) using proposed methods as clf1 andclf3 in a disjoint manner produces the following.
+Generating the MCM on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) by excluding ```clf1``` and ```clf3``` from the columns.
 
 <p align="center" width="100%">
-<img src="clf1_heatline.png" alt="heatline-clf1-example"/>
+<img src="heatline_vertical.png" alt="heatline-vertical-example"/>
 </p>
 
+and by excluding them in the rows.
+
 <p align="center" width="100%">
-<img src="clf3_heatline.png" alt="heatline-clf3-example"/>
+<img src="heatline_horizontal.png" alt="heatline-horizontal-example"/>
 </p>
 
 ## Requirements
