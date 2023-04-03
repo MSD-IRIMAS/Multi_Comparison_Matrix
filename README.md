@@ -12,16 +12,7 @@ This repo is a long term used benchmark method that generates a Multi-Comparison
 
 The input format is in a ```.csv``` file containing the statistics of each classifiers as the format of [this example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv).
 
-## Usage of Code
-
-### Variable Adaptations
-
-In the ```main.py``` file, set the:
-
-1. ```path_res``` variable to the path where to find the csv file
-2. ```output_dir``` variable to the path where the resulted comparison will be saved
-
-## Plot the MCM
+## Usage of Code - Plot the MCM
 
 In order for the user to plot the MCM, first thing is to load the ```.csv``` file into a ```pandas``` dataframe and feed it to the ```compare``` function. The user should specify the ```fig_savename``` parameter in order to save the output figure in ```pdf``` and ```png``` formats.
 
