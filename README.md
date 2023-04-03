@@ -1,4 +1,4 @@
-# Multi Comparison Matrix (MCM)
+# Multi-Comparison Matrix (MCM)
 
 ### A Long Term Approach to Benchmark Evaluations
 
@@ -27,7 +27,23 @@ In order for the user to plot the MCM, first thing is to load the ```.csv``` fil
 
 ## Examples
 
-Generating the MCM on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) produces the following.
+Generating the MCM on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) produces the following. To generate the following figure, the user follows this simple code:
+
+```
+import pandas as pd
+from MCM import MCM
+
+df_results = pd.read_csv('path/to/csv')
+
+output_dir = '/output/directory/desired'
+
+MCM.compare(
+        output_dir=output_dir,
+        df_results=df_results,
+        fig_savename='heatmap',
+        load_analysis=False
+    )
+```
 
 <p align="center" width="100%">
 <img src="heatmap.png" alt="heatmap-example"/>
@@ -35,11 +51,45 @@ Generating the MCM on the [following example](https://github.com/MSD-IRIMAS/Mult
 
 Generating the MCM on the [following example](https://github.com/MSD-IRIMAS/Multi_Pairwise_Comparison/blob/main/results_example.csv) by excluding ```clf1``` and ```clf3``` from the columns.
 
+```
+import pandas as pd
+from MCM import MCM
+
+df_results = pd.read_csv('path/to/csv')
+
+output_dir = '/output/directory/desired'
+
+MCM.compare(
+        output_dir=output_dir,
+        df_results=df_results,
+        excluded_col_comparates=['clf1','clf3'],
+        fig_savename='heatline_vertical',
+        load_analysis=False
+    )
+```
+
 <p align="center" width="100%">
 <img src="heatline_vertical.png" alt="heatline-vertical-example"/>
 </p>
 
 and by excluding them in the rows.
+
+```
+import pandas as pd
+from MCM import MCM
+
+df_results = pd.read_csv('path/to/csv')
+
+output_dir = '/output/directory/desired'
+
+MCM.compare(
+        output_dir=output_dir,
+        df_results=df_results,
+        excluded_row_comparates=['clf1','clf3'],
+        fig_savename='heatline_vertical',
+        load_analysis=False
+    )
+```
 
 <p align="center" width="100%">
 <img src="heatline_horizontal.png" alt="heatline-horizontal-example"/>
