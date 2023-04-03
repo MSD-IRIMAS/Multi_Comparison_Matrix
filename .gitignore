@@ -11,8 +11,8 @@ __pycache__/
 *.png
 !results_example.csv
 !heatmap.png
-!clf3_heatline.png
-!clf1_heatline.png
+!heatline_vertical.png
+!heatline_horizontal.png
 
 # Distribution / packaging
 .Python
