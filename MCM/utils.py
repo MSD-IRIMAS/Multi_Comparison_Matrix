@@ -543,7 +543,7 @@ def get_cell_legend(
     cell_legend = capitalize_label(analysis['use-mean'])
     longest_string = len(cell_legend)
 
-    win_tie_loss_string = f"{win_label} / {tie_label} / {loss_label}"
+    win_tie_loss_string = f"{win_label} \ {tie_label} \ {loss_label}"
     longest_string = max(longest_string, len(win_tie_loss_string))
 
     cell_legend = f"{cell_legend}\n{win_tie_loss_string}"
