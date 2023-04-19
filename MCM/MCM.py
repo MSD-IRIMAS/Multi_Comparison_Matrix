@@ -55,9 +55,9 @@ def compare(
         font_size='auto',
         colorbar_orientation='vertical',
         colorbar_value=None,
-        win_label="row > col",
-        tie_label="row = col",
-        loss_label="row < col",
+        win_label="row>col",
+        tie_label="row=col",
+        loss_label="row<col",
         include_legend=True,
         show_symetry=True,
 ):
@@ -282,9 +282,9 @@ def draw(analysis,
         font_size='auto',
         colorbar_orientation='vertical',
         colorbar_value=None,
-        win_label='row > col',
-        tie_label='row = col',
-        loss_label='row < col',
+        win_label='row>col',
+        tie_label='row=col',
+        loss_label='row<col',
         show_symetry=True,
         include_legend=True,
     ):
@@ -396,7 +396,7 @@ def draw(analysis,
     else:
         cell_legend = ""
         p_value_text = ""
-        longest_string = len(f"{win_label} / {tie_label} / {loss_label}")
+        longest_string = len(f"{win_label} \ {tie_label} \ {loss_label}")
     
     annot_out = get_annotation(
         analysis=analysis,
