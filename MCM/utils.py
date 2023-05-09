@@ -535,15 +535,15 @@ def holms_correction(analysis):
 
 def get_cell_legend(
         analysis,
-        win_label='row > col',
-        tie_label='row = col',
-        loss_label='row < col',
+        win_label='r>c',
+        tie_label='r=c',
+        loss_label='r<c',
 ):
 
     cell_legend = capitalize_label(analysis['use-mean'])
     longest_string = len(cell_legend)
 
-    win_tie_loss_string = f"{win_label} \ {tie_label} \ {loss_label}"
+    win_tie_loss_string = f"{win_label} / {tie_label} / {loss_label}"
     longest_string = max(longest_string, len(win_tie_loss_string))
 
     cell_legend = f"{cell_legend}\n{win_tie_loss_string}"
@@ -616,16 +616,16 @@ def get_annotation(
 
                 if 'win' in pairwise_keys:
                     
-                    string_in_cell = f"{string_in_cell}{pairwise_content['win']} \ "
-                    string_in_cell = f"{string_in_cell}{pairwise_content['tie']} \ "
+                    string_in_cell = f"{string_in_cell}{pairwise_content['win']} / "
+                    string_in_cell = f"{string_in_cell}{pairwise_content['tie']} / "
                     string_in_cell = f"{string_in_cell}{pairwise_content['loss']}\n"
                     
                     n_info_per_cell += 1
                 
                 if 'p-x-wins' in pairwise_keys:
 
-                    string_in_cell = f"{string_in_cell}{pairwise_content['p-x-wins']:{fmt}} \ "
-                    string_in_cell = f"{string_in_cell}{pairwise_content['p-rope']:{fmt}} \ "
+                    string_in_cell = f"{string_in_cell}{pairwise_content['p-x-wins']:{fmt}} / "
+                    string_in_cell = f"{string_in_cell}{pairwise_content['p-rope']:{fmt}} / "
                     string_in_cell = f"{string_in_cell}{pairwise_content['p-y-wins']:{fmt}}\n"
                 
                 if 'pvalue' in pairwise_keys:
