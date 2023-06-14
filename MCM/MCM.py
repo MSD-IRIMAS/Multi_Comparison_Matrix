@@ -315,6 +315,17 @@ def draw(analysis,
     
     """
 
+    latex_string = "\\documentclass[a4,12pt]{article}\n"
+    latex_string += "\\usepackage{colortbl}\n"
+    latex_string += "\\usepackage{pgfplots}\n"
+    latex_string += "\\usepackage[margin=2cm]{geometry}\n"
+    latex_string += "\\pgfplotsset{compat=newest}\n"
+    latex_string += "\\begin{document}\n"
+    latex_string += "\\begin{table}\n"
+    latex_string += "\\footnotesize\n"
+    latex_string += "\\sffamily\n"
+    latex_string += "\\begin{center}\n"
+
     if (col_comparates is not None) and (excluded_col_comparates is not None):
         print('Choose whether to include or exclude, not both!')
         return
@@ -381,7 +392,7 @@ def draw(analysis,
         
         if analysis['include-pvalue']:
 
-            p_value_text = f"If in bold, then\np-value $<$ {analysis['pvalue-threshold']:.2f}"
+            p_value_text = f"If in bold, then\np-value < {analysis['pvalue-threshold']:.2f}"
 
             if analysis['pvalue-correction'] is not None:
 
@@ -484,6 +495,9 @@ def draw(analysis,
         cbar.ax.tick_params(labelsize=font_size)
         cbar.set_label(label=capitalize_label(_colorbar_value), size=font_size)
 
+    cm_norm = plt.Normalize(_vmin, _vmax)
+    cm = plt.colormaps[_colormap]
+
     xticks, yticks = get_ticks(analysis, row_comparates, col_comparates, precision)
     ax.set_xticks(np.arange(n_cols), labels=xticks, fontsize=font_size)
     ax.set_yticks(np.arange(n_rows), labels=yticks, fontsize=font_size)
@@ -493,10 +507,19 @@ def draw(analysis,
 
     start_j = 0
 
+    if analysis['order-stats'] == 'average-statistic':
+        ordering = 'Mean-' + analysis['used-statistics']
+    else:
+        ordering = analysis['order-stats']
+
+    latex_table = []
+    latex_table.append([f"{ordering}"] + [f"\shortstack{{{_}}}".replace('\n', ' \\\\ ') for _ in xticks])
 
     for i in range(n_rows):
 
         row_comparate = row_comparates[i]
+
+        latex_row = []
 
         if can_be_symmetrical and (not show_symetry):
             start_j = i
@@ -531,6 +554,10 @@ def draw(analysis,
                         )
 
                 im.axes.text(j, i, df_annotations_np[i, j], **cell_text_arguments)
+
+                latex_cell = "\\rule{0em}{3ex} " + df_annotations_np[i, j].replace("\n", " \\\\ ")
+                latex_row.append(f"\\cellcolor[rgb]{{{','.join([str(round(_, 4)) for _ in cm(cm_norm(pairwise_matrix[i, j]))[:-1]])}}}\\shortstack{{{latex_cell}}}")
+
                 continue
 
             pairwise_key = get_keys_for_two_comparates(row_comparate, col_comparate)
@@ -538,16 +565,28 @@ def draw(analysis,
             pairwise_content = analysis[pairwise_key]
             pairwise_keys = list(pairwise_content.keys())
 
+            latex_bold = ""
+
             if "pvalue" in pairwise_keys:
                 if analysis[pairwise_key]["is-significant"]:
                     cell_text_arguments.update(fontweight='bold')
+                    latex_bold = "\\bfseries "
 
             im.axes.text(j, i, df_annotations_np[i, j], **cell_text_arguments)
 
-    if analysis['order-stats'] == 'average-statistic':
-        ordering = 'Mean-' + analysis['used-statistics']
-    else:
-        ordering = analysis['order-stats']
+            latex_cell = "\\rule{0em}{3ex} " + df_annotations_np[i, j].replace("\n", " \\\\ ")
+            latex_row.append(f"{latex_bold}\\cellcolor[rgb]{{{','.join([str(round(_, 4)) for _ in cm(cm_norm(pairwise_matrix[i, j]))[:-1]])}}}\\shortstack{{{latex_cell}}}")
+
+        if legend_cell_location is None:
+            latex_cell = "\\rule{0em}{3ex} " + f"{cell_legend}".replace("\n", " \\\\ ") if i == 0 else "\\null"
+            latex_row.append(f"\\shortstack{{{latex_cell}}}")
+
+        latex_table.append([f"\shortstack{{{yticks[i]}}}".replace('\n', ' \\\\ ')] + latex_row)
+
+    # if analysis['order-stats'] == 'average-statistic':
+    #     ordering = 'Mean-' + analysis['used-statistics']
+    # else:
+    #     ordering = analysis['order-stats']
     if n_cols == n_rows == 1:
         # special case when 1x1
         x = ax.get_position().x0 - 1
@@ -616,3 +655,41 @@ def draw(analysis,
         plt.close()
     else:
         plt.show()
+
+    latex_string += f"\\begin{{tabular}}{{{'c' * (len(latex_table[0]) + 1)}}}\n" # +1 for labels
+    for latex_row in latex_table:
+        latex_string += " & ".join(latex_row) + " \\\\[1ex]" + "\n"
+
+    if colorbar_orientation == "horizontal":
+        latex_string += "\\end{tabular}\\\\\n"
+    else:
+        latex_string +=  "\\end{tabular}\n"
+
+    latex_colorbar_0 = "\\begin{tikzpicture}[baseline=(current bounding box.center)]\\begin{axis}[hide axis,scale only axis,"
+    latex_colorbar_1 = f"colormap={{cm}}{{rgb255(1)=({','.join([str(int(_ * 255)) for _ in cm(cm_norm(min_value))[:-1]])}) rgb255(2)=(220,220,220) rgb255(3)=({','.join([str(int(_ * 255)) for _ in cm(cm_norm(max_value))[:-1]])})}},"
+    latex_colorbar_2 = f"colorbar horizontal,point meta min={_vmin:.02f},point meta max={_vmax:.02f},"
+    latex_colorbar_3 = "colorbar/width=1.0em"
+    latex_colorbar_4 = "}] \\addplot[draw=none] {0};\\end{axis}\\end{tikzpicture}"
+
+    if colorbar_orientation == "horizontal":
+        latex_string += latex_colorbar_0 + "width=0sp,height=0sp,colorbar horizontal,colorbar style={width=0.25\linewidth," + latex_colorbar_1 + latex_colorbar_2 + latex_colorbar_3 + ",scaled x ticks=false,xticklabel style={/pgf/number format/fixed,/pgf/number format/precision=3}," + f"xlabel={{{_colorbar_value}}}," + latex_colorbar_4
+    else:
+        latex_string += latex_colorbar_0 + "width=1pt,colorbar right,colorbar style={height=0.25\linewidth," + latex_colorbar_1 + latex_colorbar_2 + latex_colorbar_3  + ",scaled y ticks=false,ylabel style={rotate=180},yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=3}," + f"ylabel={{{_colorbar_value}}}," + latex_colorbar_4
+
+    latex_string += "\\end{center}\n"
+    latex_string += "\\caption{[...] \\textbf{" + f"{p_value_text}".replace("\n", " ") + "} [...]}\n"
+    latex_string += "\\end{table}\n"
+    latex_string += "\\end{document}\n"
+
+    latex_string = latex_string.replace(">", "$>$")
+    latex_string = latex_string.replace("<", "$<$")
+
+    if savename != "":
+        with open(f"{output_dir}/{savename}.tex", "w", encoding = "utf8", newline = "\n") as file:
+            file.writelines(latex_string)
+
+    # latex references:
+    # * https://tex.stackexchange.com/a/120187
+    # * https://tex.stackexchange.com/a/334293
+    # * https://tex.stackexchange.com/a/592942
+    # * https://tex.stackexchange.com/a/304215
