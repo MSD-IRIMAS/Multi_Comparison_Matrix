@@ -49,7 +49,7 @@ def compare(
     order_better="decreasing",
     dataset_column=None,
     precision=4,
-    load_analysis=True,
+    load_analysis=False,
     row_comparates=None,
     col_comparates=None,
     excluded_row_comparates=None,
@@ -203,7 +203,7 @@ def get_analysis(
     order_better="decreasing",
     dataset_column=None,
     precision=4,
-    load_analysis=True,
+    load_analysis=False,
 ):
     """
 
