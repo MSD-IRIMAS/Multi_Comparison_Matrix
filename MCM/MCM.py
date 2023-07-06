@@ -65,6 +65,71 @@ def compare(
     include_legend=True,
     show_symetry=True,
 ):
+    """
+    Generate the MCM
+
+    Parameters
+    ----------
+
+    df_results              : pandas DataFrame, the csv file containing results
+    output_dir              : str, default = './', the output directory for the results
+    pdf_savename            : str, default = None, the name of the saved file into pdf format, if None, will not
+        be saved into this format
+    png_savename            : str, default = None, the name of the saved file into png format, if None, will not
+        be saved into this format
+    csv_savename            : str, default = None, the name of the saved file into csv format, if None, will not
+        be saved into this format
+    tex_savename            : str, default = None, the name of the saved file into tex format, if None, will not
+        be saved into this format
+    used_statistic          : str, default = 'Score', one can imagine using error, time, memory etc. instead
+    save_as_json            : bool, default = True, whether or not to save the python analysis dict
+        into a json file format
+    plot_1v1_comparisons    : bool, default = True, whether or not to plot the 1v1 scatter results
+    order_WinTieLoss        : str, default = 'higher', the order on considering a win or a loss
+        for a given statistics
+    include_ProbaWinTieLoss : bool, default = False, condition whether or not include
+                             the bayesian test of [1] for a probabilistic win tie loss count
+    bayesian_rope           : float, default = 0.01, the rope used in case include_ProbaWinTieLoss is True
+    include_pvalue          : bool, default = True, condition whether or not include a pvalue stats
+    pvalue_test             : str, default = 'wilcoxon', the statistical test to produce the pvalue stats.
+    pvalue_correction       : str, default = None, which correction to use for the pvalue significant test
+    pvalue_threshold        : float, default = 0.05, threshold for considering a comparison is significant
+        or not. If pvalue < pvalue_threshhold -> comparison is significant.
+    use_mean               : str, default = 'mean-difference', the mean used to comapre two comparates.
+    order_stats             : str, default = 'average-statistic', the way to order the used_statistic, default
+        setup orders by average statistic over all datasets
+    order_better            : str, default = 'decreasing', by which order to sort stats, from best to worse
+    dataset_column          : str, default = 'dataset_name', the name of the datasets column in the csv file
+    precision               : int, default = 4, the number of floating numbers after decimal point
+    load_analysis           : bool, default = False, if the analysis json file is already created before, the
+        use can choose to load it
+    row_comparates          : list of str, default = None, a list of included row comparates, if None, all of
+        the comparates in the study are placed in the rows.
+    col_comparates          : list of str, default = None, a list of included col comparates, if None, all of
+        the comparates in the study are placed in the cols.
+    excluded_row_comparates : list of str, default = None, a list of excluded row comparates,
+        if None, no comparate in the study is excluded from the rows
+    excluded_col_comparates : list of str, default = None, a list of excluded col comparates,
+        if None, no comparate in the study is excluded from the cols
+    colormap                : str, default = 'coolwarm', the colormap used in matplotlib, if set to None,
+                    no color map is used and the heatmap is turned off, no colors will be seen
+    fig_size                : str ot tuple of two int (example : '7,10'), default = 'auto', the height and width of the figure,
+        if 'auto', use get_fig_size function in utils.py. Note that the fig size values are in
+        matplotlib units
+    font_size               : int, default = 17, the font size of text
+    colorbar_orientation    : str, default = 'vertical', in which orientation to show the colorbar
+        either horizontal or vertical
+    colorbar_value          : str, default = 'mean-difference', the values for which the heat map colors
+        are based on
+    win_label               : str, default = "r>c", the winning label to be set on the MCM
+    tie_label               : str, default = "r=c", the tie label to be set on the MCM
+    loss_label              : str, default = "r<c", the loss label to be set on the MCM
+    include_legend          : bool, default = True, whether or not to show the legend on the MCM
+    show_symetry            : bool, default = True, whether or not to show the symetrical part of the heatmap
+
+
+    """
+
     if isinstance(df_results, str):
         # assuming its a path
         try:
@@ -148,33 +213,34 @@ def get_analysis(
     Parameters
     ----------
 
-    df_results : pandas DataFrame, the csv file containing results
-    output_dir : str, default = './', the output directory for the results
-    used_statistic : str, default = 'Score', one can imagine using error, time, memory etc. instead
-    save_as_json : bool, default = True, whether or not to save the python analysis dict
-                   into a json file format
-    plot_1v1_comparisons : bool, default = True, whether or not to plot the 1v1 scatter results
-
-
-    order_WinTieLoss : str, default = 'higher', the order on considering a win or a loss
-                       for a given statistics
-    includeProbaWinTieLoss : bool, default = False, condition whether or not include
+    df_results              : pandas DataFrame, the csv file containing results
+    output_dir              : str, default = './', the output directory for the results
+    used_statistic          : str, default = 'Score', one can imagine using error, time, memory etc. instead
+    save_as_json            : bool, default = True, whether or not to save the python analysis dict
+        into a json file format
+    plot_1v1_comparisons    : bool, default = True, whether or not to plot the 1v1 scatter results
+    order_WinTieLoss        : str, default = 'higher', the order on considering a win or a loss
+        for a given statistics
+    include_ProbaWinTieLoss : bool, default = False, condition whether or not include
                              the bayesian test of [1] for a probabilistic win tie loss count
-    include_pvalue : bool, default = True, condition whether or not include a pvalue stats
-    pvalue_test : str, default = 'wilcoxon', the statistical test to produce the pvalue stats.
-    pvalue_correction : str, default = None, which correction to use for the pvalue significant test
-    pvalue_threshhold : float, default = 0.05, threshold for considering a comparison is significant
-                        or not. If pvalue < pvalue_threshhold -> comparison is significant.
-    used_mean : str, default = 'mean-difference', the mean used to comapre two comparates.
-    bayesian_rope : float, default = 0.01, the rope used in case include_ProbaWinTieLoss is True
-    order_stats : str, default = 'average-statistic', the way to order the used_statistic, default
-                  setup orders by average statistic over all datasets
-    order_better : str, default = 'decreasing', by which order to sort stats, from best to worse
-    dataset_column : str, default = 'dataset_name', the name of the datasets column in the csv file
+    bayesian_rope           : float, default = 0.01, the rope used in case include_ProbaWinTieLoss is True
+    include_pvalue          : bool, default = True, condition whether or not include a pvalue stats
+    pvalue_test             : str, default = 'wilcoxon', the statistical test to produce the pvalue stats.
+    pvalue_correction       : str, default = None, which correction to use for the pvalue significant test
+    pvalue_threshhold       : float, default = 0.05, threshold for considering a comparison is significant
+        or not. If pvalue < pvalue_threshhold -> comparison is significant.
+    use_mean               : str, default = 'mean-difference', the mean used to comapre two comparates.
+    order_stats             : str, default = 'average-statistic', the way to order the used_statistic, default
+        setup orders by average statistic over all datasets
+    order_better            : str, default = 'decreasing', by which order to sort stats, from best to worse
+    dataset_column          : str, default = 'dataset_name', the name of the datasets column in the csv file
+    precision               : int, default = 4, the number of floating numbers after decimal point
+    load_analysis           : bool, default = False, if the analysis json file is already created before, the
+        use can choose to load it
 
     Returns
     -------
-    analysis : python dictionary containing all extracted comparisons
+    analysis                : python dictionary containing all extracted comparisons
 
     """
 
@@ -304,23 +370,40 @@ def draw(
 
     Parameters
     ----------
-    analysis : python dict, default = None, a python dictionary exrtracted using get_analysis function
-    output_dir : str, default = './', output directory for the results
-    load_analysis : bool, default = True, whether or not to load the analysis json file
-    colormap : str, default = 'coolwarm', the colormap used in matplotlib, if set to None,
+    analysis                : python dict, default = None, a python dictionary exrtracted using get_analysis function
+    output_dir              : str, default = './', output directory for the results
+    pdf_savename            : str, default = None, the name of the saved file into pdf format, if None, will not
+        be saved into this format
+    png_savename            : str, default = None, the name of the saved file into png format, if None, will not
+        be saved into this format
+    csv_savename            : str, default = None, the name of the saved file into csv format, if None, will not
+        be saved into this format
+    tex_savename            : str, default = None, the name of the saved file into tex format, if None, will not
+        be saved into this format
+    row_comparates          : list of str, default = None, a list of included row comparates, if None, all of
+        the comparates in the study are placed in the rows.
+    col_comparates          : list of str, default = None, a list of included col comparates, if None, all of
+        the comparates in the study are placed in the cols.
+    excluded_row_comparates : list of str, default = None, a list of excluded row comparates,
+        if None, no comparate in the study is excluded from the rows
+    excluded_col_comparates : list of str, default = None, a list of excluded col comparates,
+        if None, no comparate in the study is excluded from the cols
+    precision               : int, default = 4, the number of floating numbers after the decimal point
+    colormap                : str, default = 'coolwarm', the colormap used in matplotlib, if set to None,
                     no color map is used and the heatmap is turned off, no colors will be seen
-    colorbar_value : str, default = 'mean-difference', the values for which the heat map colors
-                        are based on
-    fig_size : str ot tuple of two int, default = 'auto', the height and width of the figure,
-               if 'auto', use get_fig_size function in utils.py
-    font_size : int, default = 17, the font size of text
-    pixels_per_clf_hieght : float, default = 3, the number of pixels used per comparate in height
-                            inside each cell of the heatmap
-    pixels_per_clf_width : float, default = 3.5, the number of pixels used per comparate in width
-                           inside each cell of the heatmap
-    show_symetry : bool, default = True, whether or not to show the symetrical part of the heatmap
-    colorbar_orientation : str, default = 'vertical', in which orientation to show the colorbar
+    fig_size                : str ot tuple of two int (example : '7,10'), default = 'auto', the height and width of the figure,
+        if 'auto', use get_fig_size function in utils.py. Note that the fig size values are in
+        matplotlib units
+    font_size               : int, default = 17, the font size of text
+    colorbar_orientation    : str, default = 'vertical', in which orientation to show the colorbar
                            either horizontal or vertical
+    colorbar_value          : str, default = 'mean-difference', the values for which the heat map colors
+        are based on
+    win_label               : str, default = "r>c", the winning label to be set on the MCM
+    tie_label               : str, default = "r=c", the tie label to be set on the MCM
+    loss_label              : str, default = "r<c", the loss label to be set on the MCM
+    show_symetry            : bool, default = True, whether or not to show the symetrical part of the heatmap
+    include_legend          : bool, default = True, whether or not to show the legend on the MCM
 
     """
 
