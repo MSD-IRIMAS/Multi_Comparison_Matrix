@@ -9,6 +9,7 @@ __pycache__/
 *.json
 *.csv
 *.png
+*.tex
 !results_example.csv
 !heatmap.png
 !heatline_vertical.png
