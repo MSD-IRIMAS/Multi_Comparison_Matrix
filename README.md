@@ -12,7 +12,7 @@ The input format is in a ```.csv``` file containing the statistics of each class
 
 ## Usage of Code - Plot the MCM
 
-In order for the user to plot the MCM, first thing is to load the ```.csv``` file into a ```pandas``` dataframe and feed it to the ```compare``` function. The user should specify the ```fig_savename``` parameter in order to save the output figure in ```pdf``` and ```png``` formats.
+In order for the user to plot the MCM, first thing is to load the ```.csv``` file into a ```pandas``` dataframe and feed it to the ```compare``` function. The user should specify the ```pdf_savename```, ```png_savename```, ```csv_savename``` or ```tex_savename``` parameter in order to save the output figure in ```pdf```, ```png```, ```csv``` or ```tex``` formats respecively.
 
 ## Examples
 
@@ -29,8 +29,8 @@ output_dir = '/output/directory/desired'
 MCM.compare(
         output_dir=output_dir,
         df_results=df_results,
-        fig_savename='heatmap',
-        load_analysis=False
+        pdf_savename="heatmap",
+        png_savename="heatmap",
     )
 ```
 
@@ -52,8 +52,9 @@ MCM.compare(
         output_dir=output_dir,
         df_results=df_results,
         excluded_col_comparates=['clf1','clf3'],
-        fig_savename='heatline_vertical',
-        load_analysis=False
+        png_savename='heatline_vertical',
+        tex_savename='heatline_vertical',
+        include_ProbaWinTieLoss=True
     )
 ```
 
@@ -75,8 +76,8 @@ MCM.compare(
         output_dir=output_dir,
         df_results=df_results,
         excluded_row_comparates=['clf1','clf3'],
-        fig_savename='heatline_vertical',
-        load_analysis=False
+        png_savename='heatline_horizontal',
+        csv_savename='heatline_horizontal',
     )
 ```
 
@@ -88,8 +89,9 @@ MCM.compare(
 
 The following python packages are required for the usage of the module:
 
-1. ```numpy==1.23.5```
-2. ```pandas==1.5.2```
-3. ```matplotlib==3.6.2```
+1. ```numpy==1.24.4```
+2. ```pandas==2.0.3```
+3. ```matplotlib==3.7.4```
 4. ```scipy==1.10.0```
 5. ```baycomp==1.0```
+6. ```tqdm==4.66.1```

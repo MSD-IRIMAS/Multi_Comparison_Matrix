@@ -553,6 +553,7 @@ def draw(
 
     plt.rcParams["figure.autolayout"] = True
     fig, ax = plt.subplots(1, 1, figsize=(figsize[0], figsize[1]))
+    ax.grid(False)
 
     _can_be_negative = False
     if colorbar_value is None or colorbar_value == "mean-difference":
