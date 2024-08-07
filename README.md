@@ -5,16 +5,19 @@
 ## Papers Using the MCM:
 
 1. Middlehurst et al. 2024 "[Bake off redux: a review and experimental evaluation of recent time series classification algorithms](https://link.springer.com/article/10.1007/s10618-024-01022-1)" Data Mining and Knowledge Discovery
-2. Ismail-Fawaz et al. 2024 "[Finding foundation models for time series classification with a pretext task](https://arxiv.org/abs/2311.14534)" The Pacific-Asia Conference on Knowledge Discovery and Data Mining - International Workshop on Temporal Analytics
-3. Foumani et al. 2023 "[Series2Vec: Similarity-based Self-supervised Representation Learning for Time Series Classification](https://www.researchgate.net/profile/Navid-Mohammadi-Foumani/publication/376683892_Series2Vec_Similarity-based_Self-supervised_Representation_Learning_for_Time_Series_Classification/links/6583a4c70bb2c7472bfbd4d2/Series2Vec-Similarity-based-Self-supervised-Representation-Learning-for-Time-Series-Classification.pdf)"
+2. Ismail-Fawaz et al. 2024 "[Finding foundation models for time series classification with a pretext task]([https://arxiv.org/abs/2311.14534](https://doi.org/10.1007/978-981-97-2650-9_10))" The Pacific-Asia Conference on Knowledge Discovery and Data Mining - International Workshop on Temporal Analytics
+3. Foumani et al. 2023 "[Series2Vec: Similarity-based Self-supervised Representation Learning for Time Series Classification](https://doi.org/10.1007/s10618-024-01043-w)" Data Mining and Knowledge Discovery
 4. Holder et al. 2023 "[A review and evaluation of elastic distance functions for time series clustering]([A review and evaluation of elastic distance functions for time series clustering](https://link.springer.com/article/10.1007/s10115-023-01952-0))" Knowledge and Information Systems
 5. Ismail-Fawaz et al. 2023 "[LITE: Light Inception with boosTing tEchniques for Time Series Classification](https://ieeexplore.ieee.org/abstract/document/10302569)" IEEE 10th International Conference on Data Science and Advanced Analytics
 6. Koh et al. 2023 "[PSICHIC: physicochemical graph neural network for learning protein-ligand interaction fingerprints from sequence data](https://www.biorxiv.org/content/10.1101/2023.09.17.558145v1.abstract)" bioRxiv
 7. Ayllón-Gavilán et al. 2023 "[Convolutional and Deep Learning based techniques for Time Series Ordinal Classification](https://arxiv.org/abs/2306.10084)"
 8. Ismail-Fawaz et al. 2023 "[ShapeDBA: Generating Effective Time Series Prototypes Using ShapeDTW Barycenter Averaging](https://link.springer.com/chapter/10.1007/978-3-031-49896-1_9)" The European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases Workshop on Advanced Analytics and Learning on Temporal Data
-9. Dempster et al. 2023 "[QUANT: A Minimalist Interval Method for Time Series Classification](https://arxiv.org/abs/2308.00928)"
+9. Dempster et al. 2023 "[QUANT: A Minimalist Interval Method for Time Series Classification](https://doi.org/10.1007/s10618-024-01036-9)" Data Mining and Knowledge Discovery
 10. Holder et al. 2023 "[Clustering Time Series with k-Medoids Based Algorithms](https://link.springer.com/chapter/10.1007/978-3-031-49896-1_4)" The European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases Workshop on Advanced Analytics and Learning on Temporal Data
-11. Guijo-Rubio et al. 2023 "[Unsupervised feature based algorithms for time series extrinsic regression](https://arxiv.org/abs/2305.01429)"
+11. Guijo-Rubio et al. 2023 "[Unsupervised feature based algorithms for time series extrinsic regression](https://doi.org/10.1007/s10618-024-01027-w)" Data Mining and Knowledge Discovery
+12. Fischer et al. 2024 "[Towards more sustainable and trustworthy reporting in machine learning](https://doi.org/10.1007/s10618-024-01020-3)." Data Mining and Knowledge Discovery
+13. Middlehurst et al. 2024 "[aeon: a Python toolkit for learning from time series](https://arxiv.org/abs/2406.14231)."
+14.da Silva et al. 2024 "[Artist Similarity based on Heterogeneous Graph Neural Networks](https://doi.org/10.1109/TASLP.2024.3437170)." IEEE/ACM Transactions on Audio, Speech, and Language Processing
 
 ## Summary
 
@@ -122,3 +125,11 @@ If you use this work please make sure you cite this paper:
   year={2023}
 }
 ```
+
+## Acknowledgments
+
+The work reported in this paper has been supported by the Australian Research Council
+under grant DP210100072; the ANR TIMES project (grant ANR-17- CE23-0015); and ANR
+DELEGATION project (grant ANR-21-CE23-0014) of the French Agence Nationale de la
+Recherche. The authors would like to thank Professor Eamonn Keogh and all the people
+who have contributed to the UCR time series classification archive.
