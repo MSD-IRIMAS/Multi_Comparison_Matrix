@@ -66,10 +66,10 @@ dev = [
 ]
 
 [tool.setuptools]
-packages = ["mcm"]
+packages = ["multi_comp_matrix"]
 
 [tool.setuptools.package-data]
-mcm = [
+multi_comp_matrix = [
     "*.png",
     "*.csv",
     "*.pdf",

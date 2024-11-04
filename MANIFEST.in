@@ -1,4 +1,4 @@
-recursive-include mcm *.py
+recursive-include multi_comp_matrix *.py
 include LICENSE
 include MANIFEST.in
 include pyproject.toml

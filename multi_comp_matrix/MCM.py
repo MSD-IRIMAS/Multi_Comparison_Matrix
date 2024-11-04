@@ -335,6 +335,7 @@ def get_analysis(
     re_order_comparates(df_results=df_results, analysis=analysis)
 
     if save_as_json:
+        print(save_file)
         with open(save_file, "w") as fjson:
             json.dump(analysis, fjson, cls=NpEncoder)
 
@@ -759,71 +760,67 @@ def draw(
         plt.savefig(
             os.path.join(output_dir + f"{pdf_savename}.pdf"), bbox_inches="tight"
         )
-        plt.cla()
-        plt.clf()
-        plt.close()
-    elif png_savename is not None:
+
+    if png_savename is not None:
         plt.savefig(
             os.path.join(output_dir + f"{png_savename}.png"), bbox_inches="tight"
         )
-        plt.cla()
-        plt.clf()
-
-    latex_string += (
-        f"\\begin{{tabular}}{{{'c' * (len(latex_table[0]) + 1)}}}\n"  # +1 for labels
-    )
-    for latex_row in latex_table:
-        latex_string += " & ".join(latex_row) + " \\\\[1ex]" + "\n"
-
-    if colorbar_orientation == "horizontal":
-        latex_string += "\\end{tabular}\\\\\n"
-    else:
-        latex_string += "\\end{tabular}\n"
-
-    latex_colorbar_0 = "\\begin{tikzpicture}[baseline=(current bounding box.center)]\\begin{axis}[hide axis,scale only axis,"
-    latex_colorbar_1 = f"colormap={{cm}}{{rgb255(1)=({','.join([str(int(_ * 255)) for _ in cm(cm_norm(min_value))[:-1]])}) rgb255(2)=(220,220,220) rgb255(3)=({','.join([str(int(_ * 255)) for _ in cm(cm_norm(max_value))[:-1]])})}},"
-    latex_colorbar_2 = (
-        f"colorbar horizontal,point meta min={_vmin:.02f},point meta max={_vmax:.02f},"
-    )
-    latex_colorbar_3 = "colorbar/width=1.0em"
-    latex_colorbar_4 = "}] \\addplot[draw=none] {0};\\end{axis}\\end{tikzpicture}"
-
-    if colorbar_orientation == "horizontal":
-        latex_string += (
-            latex_colorbar_0
-            + "width=0sp,height=0sp,colorbar horizontal,colorbar style={width=0.25\linewidth,"
-            + latex_colorbar_1
-            + latex_colorbar_2
-            + latex_colorbar_3
-            + ",scaled x ticks=false,xticklabel style={/pgf/number format/fixed,/pgf/number format/precision=3},"
-            + f"xlabel={{{_colorbar_value}}},"
-            + latex_colorbar_4
-        )
-    else:
-        latex_string += (
-            latex_colorbar_0
-            + "width=1pt,colorbar right,colorbar style={height=0.25\linewidth,"
-            + latex_colorbar_1
-            + latex_colorbar_2
-            + latex_colorbar_3
-            + ",scaled y ticks=false,ylabel style={rotate=180},yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=3},"
-            + f"ylabel={{{_colorbar_value}}},"
-            + latex_colorbar_4
-        )
-
-    latex_string += "\\end{center}\n"
-    latex_string += (
-        "\\caption{[...] \\textbf{"
-        + f"{p_value_text}".replace("\n", " ")
-        + "} [...]}\n"
-    )
-    latex_string += "\\end{table}\n"
-    latex_string += "\\end{document}\n"
-
-    latex_string = latex_string.replace(">", "$>$")
-    latex_string = latex_string.replace("<", "$<$")
 
     if tex_savename is not None:
+        latex_string += (
+            f"\\begin{{tabular}}{{{'c' * (len(latex_table[0]) + 1)}}}\n"  # +1 for labels
+        )
+        for latex_row in latex_table:
+            latex_string += " & ".join(latex_row) + " \\\\[1ex]" + "\n"
+
+        if colorbar_orientation == "horizontal":
+            latex_string += "\\end{tabular}\\\\\n"
+        else:
+            latex_string += "\\end{tabular}\n"
+
+        latex_colorbar_0 = "\\begin{tikzpicture}[baseline=(current bounding box.center)]\\begin{axis}[hide axis,scale only axis,"
+        latex_colorbar_1 = f"colormap={{cm}}{{rgb255(1)=({','.join([str(int(_ * 255)) for _ in cm(cm_norm(min_value))[:-1]])}) rgb255(2)=(220,220,220) rgb255(3)=({','.join([str(int(_ * 255)) for _ in cm(cm_norm(max_value))[:-1]])})}},"
+        latex_colorbar_2 = (
+            f"colorbar horizontal,point meta min={_vmin:.02f},point meta max={_vmax:.02f},"
+        )
+        latex_colorbar_3 = "colorbar/width=1.0em"
+        latex_colorbar_4 = "}] \\addplot[draw=none] {0};\\end{axis}\\end{tikzpicture}"
+
+        if colorbar_orientation == "horizontal":
+            latex_string += (
+                latex_colorbar_0
+                + "width=0sp,height=0sp,colorbar horizontal,colorbar style={width=0.25\linewidth,"
+                + latex_colorbar_1
+                + latex_colorbar_2
+                + latex_colorbar_3
+                + ",scaled x ticks=false,xticklabel style={/pgf/number format/fixed,/pgf/number format/precision=3},"
+                + f"xlabel={{{_colorbar_value}}},"
+                + latex_colorbar_4
+            )
+        else:
+            latex_string += (
+                latex_colorbar_0
+                + "width=1pt,colorbar right,colorbar style={height=0.25\linewidth,"
+                + latex_colorbar_1
+                + latex_colorbar_2
+                + latex_colorbar_3
+                + ",scaled y ticks=false,ylabel style={rotate=180},yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=3},"
+                + f"ylabel={{{_colorbar_value}}},"
+                + latex_colorbar_4
+            )
+
+        latex_string += "\\end{center}\n"
+        latex_string += (
+            "\\caption{[...] \\textbf{"
+            + f"{p_value_text}".replace("\n", " ")
+            + "} [...]}\n"
+        )
+        latex_string += "\\end{table}\n"
+        latex_string += "\\end{document}\n"
+
+        latex_string = latex_string.replace(">", "$>$")
+        latex_string = latex_string.replace("<", "$<$")
+    
         with open(
             f"{output_dir}/{tex_savename}.tex", "w", encoding="utf8", newline="\n"
         ) as file:
@@ -837,3 +834,7 @@ def draw(
 
     if tex_savename is None and pdf_savename is None and png_savename is None:
         plt.show()
+    
+    plt.cla()
+    plt.clf()
+    plt.close()
