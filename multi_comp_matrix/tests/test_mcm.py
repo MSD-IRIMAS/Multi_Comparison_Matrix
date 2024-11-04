@@ -8,9 +8,9 @@ import pytest
 def test_all_type_saving(save_type):
     """Test each of the save types."""
     data = {
-        'Column1': [1, 2, 3, 4],
-        'Column2': ['A', 'B', 'C', 'D'],
-        'Column3': [10.5, 20.5, 30.5, 40.5]
+        'clf1': [1, 2, 3, 4],
+        'clf2': [4.0, 6.0, 2.0, 1.0],
+        'clf3': [10.5, 20.5, 30.5, 40.5]
     }
     df = pd.DataFrame(data)
     with tempfile.TemporaryDirectory() as tmp:
