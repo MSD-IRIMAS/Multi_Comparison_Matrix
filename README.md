@@ -2,10 +2,14 @@
 
 ### This repository contains the software for our paper titled "[An Approach to Multiple Comparison Benchmark Evaluations that is Stable Under Manipulation of the Comparate Set](https://arxiv.org/abs/2305.11921)". This work has been done by [Ali Ismail-Fawaz](https://hadifawaz1999.github.io/), [Angus Dempster](https://dblp.uni-trier.de/pid/251/8985.html), [Chang Wei Tan](https://changweitan.com/), [Matthieu Herrmann](https://orcid.org/0000-0002-0074-470X), [Lynn Miller](https://au.linkedin.com/in/lynn-miller-bb1aa539), [Daniel Schmidt](https://research.monash.edu/en/persons/daniel-schmidt), [Stefano Berretti](http://www.micc.unifi.it/berretti/), [Jonathan Weber](https://www.jonathan-weber.eu/), [Maxime Devanne](https://maxime-devanne.com/), [Germain Forestier](https://germain-forestier.info/) and [Geoff I. Webb](https://i.giwebb.com/).
 
+## Can now be used through [PyPl](https://pypi.org/project/multi-comp-matrix/)
+
+Simply install using `pip install multi-comp-matrix` and use it as explained in the below example section
+
 ## Papers Using the MCM:
 
 1. Middlehurst et al. 2024 "[Bake off redux: a review and experimental evaluation of recent time series classification algorithms](https://link.springer.com/article/10.1007/s10618-024-01022-1)" Data Mining and Knowledge Discovery
-2. Ismail-Fawaz et al. 2024 "[Finding foundation models for time series classification with a pretext task]([https://arxiv.org/abs/2311.14534](https://doi.org/10.1007/978-981-97-2650-9_10))" The Pacific-Asia Conference on Knowledge Discovery and Data Mining - International Workshop on Temporal Analytics
+2. Ismail-Fawaz et al. 2024 "[Finding foundation models for time series classification with a pretext task](https://doi.org/10.1007/978-981-97-2650-9_10)" The Pacific-Asia Conference on Knowledge Discovery and Data Mining - International Workshop on Temporal Analytics
 3. Foumani et al. 2023 "[Series2Vec: Similarity-based Self-supervised Representation Learning for Time Series Classification](https://doi.org/10.1007/s10618-024-01043-w)" Data Mining and Knowledge Discovery
 4. Holder et al. 2023 "[A review and evaluation of elastic distance functions for time series clustering]([A review and evaluation of elastic distance functions for time series clustering](https://link.springer.com/article/10.1007/s10115-023-01952-0))" Knowledge and Information Systems
 5. Ismail-Fawaz et al. 2023 "[LITE: Light Inception with boosTing tEchniques for Time Series Classification](https://ieeexplore.ieee.org/abstract/document/10302569)" IEEE 10th International Conference on Data Science and Advanced Analytics
@@ -16,8 +20,11 @@
 10. Holder et al. 2023 "[Clustering Time Series with k-Medoids Based Algorithms](https://link.springer.com/chapter/10.1007/978-3-031-49896-1_4)" The European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases Workshop on Advanced Analytics and Learning on Temporal Data
 11. Guijo-Rubio et al. 2023 "[Unsupervised feature based algorithms for time series extrinsic regression](https://doi.org/10.1007/s10618-024-01027-w)" Data Mining and Knowledge Discovery
 12. Fischer et al. 2024 "[Towards more sustainable and trustworthy reporting in machine learning](https://doi.org/10.1007/s10618-024-01020-3)." Data Mining and Knowledge Discovery
-13. Middlehurst et al. 2024 "[aeon: a Python toolkit for learning from time series](https://arxiv.org/abs/2406.14231)."
-14.da Silva et al. 2024 "[Artist Similarity based on Heterogeneous Graph Neural Networks](https://doi.org/10.1109/TASLP.2024.3437170)." IEEE/ACM Transactions on Audio, Speech, and Language Processing
+13. Middlehurst et al. 2024 "[aeon: a Python toolkit for learning from time series](https://www.jmlr.org/papers/v25/23-1444.html)."
+14. da Silva et al. 2024 "[Artist Similarity based on Heterogeneous Graph Neural Networks](https://doi.org/10.1109/TASLP.2024.3437170)." IEEE/ACM Transactions on Audio, Speech, and Language Processing
+15. Renault, Aurélien, et al. ["Early Classification of Time Series: Taxonomy and Benchmark."](https://arxiv.org/abs/2406.18332) arXiv preprint arXiv:2406.18332 (2024).
+16. Spinnato, Francesco, et al. ["Fast, Interpretable and Deterministic Time Series Classification with a Bag-Of-Receptive-Fields."](https://link.springer.com/article/10.1007/s10618-024-01020-3) Data Mining and Knowledge Discovery (2024).
+17. Lo, Mouhamadou Mansour, et al. ["Time series classification with random convolution kernels based transforms: pooling operators and input representations matter."](https://arxiv.org/abs/2409.01115) arXiv preprint arXiv:2409.01115 (2024).
 
 ## Summary
 
