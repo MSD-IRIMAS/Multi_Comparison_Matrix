@@ -4,7 +4,7 @@ from multi_comp_matrix import MCM
 
 if __name__ == "__main__":
     path_res = "./results_example.csv"
-    output_dir = "../"
+    output_dir = "./"
 
     df_results = pd.read_csv(path_res)
 
