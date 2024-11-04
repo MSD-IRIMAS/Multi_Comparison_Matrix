@@ -2,6 +2,7 @@ from multi_comp_matrix.MCM import compare
 import pandas as pd
 import tempfile
 import time
+import pytest
 
 @pytest.mark.parametrize("save_type", ["pdf", "png", "tex"])
 def test_all_type_saving(save_type):
