@@ -37,7 +37,7 @@ Generating the MCM on the [following example](https://github.com/MSD-IRIMAS/Mult
 
 ```
 import pandas as pd
-from MCM import MCM
+from multi_comp_matrix import MCM
 
 df_results = pd.read_csv('path/to/csv')
 
@@ -59,7 +59,7 @@ Generating the MCM on the [following example](https://github.com/MSD-IRIMAS/Mult
 
 ```
 import pandas as pd
-from MCM import MCM
+from multi_comp_matrix import MCM
 
 df_results = pd.read_csv('path/to/csv')
 
@@ -83,7 +83,7 @@ and by excluding them in the rows.
 
 ```
 import pandas as pd
-from MCM import MCM
+from multi_comp_matrix import MCM
 
 df_results = pd.read_csv('path/to/csv')
 
