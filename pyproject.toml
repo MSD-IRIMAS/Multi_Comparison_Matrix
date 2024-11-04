@@ -4,18 +4,26 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "multi_comp_matrix"
-version = "0.0.1"
+version = "0.0.2"
 description = "  Multi Comparison Matrix: A long term approach to benchmark evaluations  "
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [
     {name = "Ali Ismail-Fawaz", email = "ali-el-hadi.ismail-fawaz@uha.fr"},
-    {name = "Maxime Devanne", email = "maxime.devanne@uha.fr"},
+    {name = "Angus Dempster", email = "Angus.Dempster1@monash.edu"},
+    {name = "Chang Wei Tan", email = "Chang.Tan@monash.edu"},
+    {name = "Matthieu Herrmann", email = "matthieu.herrmann@monash.edu"},
+    {name = "Lynn Miller", email = "lynn.miller1@monash.edu"},
+    {name = "Daniel F. Schmidt", email = "Daniel.Schmidt@monash.edu"},
     {name = "Stefano Berretti", email = "stefano.berretti@unifi.it"},
     {name = "Jonathan Weber", email = "jonathan.weber@uha.fr"},
-    {name = "Germain Forestier", email = "germain.forestier@uha.fr"}
+    {name = "Maxime Devanne", email = "maxime.devanne@uha.fr"},
+    {name = "Germain Forestier", email = "germain.forestier@uha.fr"},
+    {name = "Geoffrey I. Webb", email = "geoff.webb@monash.edu"}
 ]
 maintainers = [
-    {name = "Ali Ismail-Fawaz", email = "ali-el-hadi.ismail-fawaz@uha.fr"}
+    {name = "Ali Ismail-Fawaz", email = "ali-el-hadi.ismail-fawaz@uha.fr"},
+    {name = "Angus Dempster", email = "Angus.Dempster1@monash.edu"},
+    {name = "Chang Wei Tan", email = "Chang.Tan@monash.edu"}
 ]
 requires-python = ">=3.10"
 license = {text = "GPL-3.0-only"}
