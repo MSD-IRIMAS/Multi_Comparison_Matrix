@@ -109,6 +109,10 @@ MCM.compare(
 <img src="heatline_horizontal.png" alt="heatline-horizontal-example"/>
 </p>
 
+## Colormap
+
+The colormap can be [customized](https://github.com/MSD-IRIMAS/Multi_Comparison_Matrix/blob/ce2c4ebfeda57be5db56e96e71d118996147c91e/multi_comp_matrix/MCM.py#L57) to suit different needs. Users can modify it to enhance readability, including options for colorblind-friendly palettes (e.g., viridis, cividis).
+
 ## Requirements
 
 The following python packages are required for the usage of the module:
