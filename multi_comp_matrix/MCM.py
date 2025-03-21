@@ -84,7 +84,7 @@ def compare(
     used_statistic          : str, default = 'Score', one can imagine using error, time, memory etc. instead
     save_as_json            : bool, default = True, whether or not to save the python analysis dict
         into a json file format
-    plot_1v1_comparisons    : bool, default = True, whether or not to plot the 1v1 scatter results
+    plot_1v1_comparisons    : bool, default = False, whether or not to plot the 1v1 scatter results
     order_WinTieLoss        : str, default = 'higher', the order on considering a win or a loss
         for a given statistics
     include_ProbaWinTieLoss : bool, default = False, condition whether or not include
