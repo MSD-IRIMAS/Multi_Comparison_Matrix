@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "multi_comp_matrix"
-version = "0.0.2"
+version = "0.0.3"
 description = "  Multi Comparison Matrix: A long term approach to benchmark evaluations  "
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [
